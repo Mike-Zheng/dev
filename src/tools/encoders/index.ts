@@ -1,4 +1,4 @@
-import { FileCode, FileImage, ShieldCheck, FileArchive, CodeXml, KeyRound, QrCode, Link } from 'lucide-vue-next'
+import { FileCode, FileImage, ShieldCheck, FileArchive, CodeXml, KeyRound, QrCode, Link, Fingerprint } from 'lucide-vue-next'
 import { defineTool } from '../registry'
 
 defineTool(
@@ -249,6 +249,46 @@ defineTool(
       c_alg: '簽章演算法',
       c_typ: 'Token 類型',
       c_kid: '金鑰 ID',
+    },
+  },
+)
+
+defineTool(
+  { id: 'md5', group: 'encoders', icon: Fingerprint, keywords: ['md5', 'hash', 'digest', 'checksum', 'encrypt'], component: () => import('./Md5Tool.vue') },
+  {
+    en: {
+      title: 'MD5 Encoder',
+      short: 'MD5',
+      description: 'Generate MD5 digests of text and verify text against an MD5 digest',
+      keywords: 'md5 hash digest checksum encrypt',
+      uppercaseDesc: 'Output the digest in uppercase hexadecimal',
+      lengthDesc: '32 characters is the full digest; 16 characters is its middle part',
+      len32: '32 characters',
+      len16: '16 characters',
+      perLine: 'Hash each line',
+      perLineDesc: 'Generate one MD5 digest for every line of the input',
+      oneWay: 'MD5 is a one-way hash: a digest cannot be decoded back into the original text. Use Verify below to check whether a text matches a digest.',
+      verify: 'Verify',
+      verifyDesc: 'Paste an MD5 digest (16 or 32 characters) to check it against the input',
+      match: 'Match',
+      mismatch: 'No match',
+    },
+    'zh-TW': {
+      title: 'MD5 編碼工具',
+      short: 'MD5',
+      description: '產生文字的 MD5 雜湊值，並驗證文字與 MD5 雜湊值是否相符',
+      keywords: 'md5 雜湊 摘要 檢查碼 加密 編碼',
+      uppercaseDesc: '以大寫十六進位輸出雜湊值',
+      lengthDesc: '32 位為完整雜湊值；16 位為取其中間 16 個字元',
+      len32: '32 位',
+      len16: '16 位',
+      perLine: '逐行雜湊',
+      perLineDesc: '為輸入的每一行各產生一個 MD5 雜湊值',
+      oneWay: 'MD5 是單向雜湊，無法將雜湊值解碼回原文。可使用下方「驗證」檢查文字是否與雜湊值相符。',
+      verify: '驗證',
+      verifyDesc: '貼上 MD5 雜湊值（16 或 32 位）以比對輸入內容',
+      match: '相符',
+      mismatch: '不相符',
     },
   },
 )
