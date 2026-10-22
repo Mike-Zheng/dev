@@ -5,3 +5,4 @@
 import './converters'
 import './encoders'
 import './formatters'
+import './generators'
