@@ -1,4 +1,4 @@
-import { TextSearch, GitCompare, Quote, ListChecks, BookOpen } from 'lucide-vue-next'
+import { TextSearch, GitCompare, Quote, ListChecks, BookOpen, CopyMinus, ArrowDownAZ } from 'lucide-vue-next'
 import { defineTool } from '../registry'
 
 defineTool(
@@ -195,6 +195,84 @@ defineTool(
       listA: 'A',
       listB: 'B',
       items: '個項目',
+    },
+  },
+)
+
+defineTool(
+  { id: 'dedupe', group: 'text', icon: CopyMinus, keywords: ['duplicate', 'unique', 'distinct', 'uniq', 'lines'], component: () => import('./DedupeTool.vue') },
+  {
+    en: {
+      title: 'Duplicate Line Remover',
+      short: 'Remove Duplicates',
+      description: 'Remove duplicate lines from text, keeping the original order',
+      keywords: 'duplicate unique distinct remove lines',
+      modeDesc: 'Choose which lines to keep',
+      modeUnique: 'Remove duplicates (keep first)',
+      modeSingles: 'Only lines that appear once',
+      modeDuplicates: 'Only repeated lines',
+      caseSensitive: 'Case sensitive comparison',
+      trim: 'Trim lines',
+      trimDesc: 'Remove leading and trailing whitespace before comparing',
+      removeEmpty: 'Remove empty lines',
+      summary: '{kept} lines kept · {removed} removed',
+    },
+    'zh-TW': {
+      title: '刪除重複行',
+      short: '刪除重複行',
+      description: '刪除文字中重複的行，並保留原本的順序',
+      keywords: '重複 去重 唯一 刪除 行',
+      modeDesc: '選擇要保留哪些行',
+      modeUnique: '刪除重複（保留第一次出現）',
+      modeSingles: '只保留出現一次的行',
+      modeDuplicates: '只保留有重複的行',
+      caseSensitive: '比較時區分大小寫',
+      trim: '去除行首尾空白',
+      trimDesc: '比較前先移除每行開頭與結尾的空白',
+      removeEmpty: '移除空白行',
+      summary: '保留 {kept} 行 · 移除 {removed} 行',
+    },
+  },
+)
+
+defineTool(
+  { id: 'sort-lines', group: 'text', icon: ArrowDownAZ, keywords: ['sort', 'order', 'alphabetical', 'natural', 'shuffle', 'lines'], component: () => import('./SortLinesTool.vue') },
+  {
+    en: {
+      title: 'Line Sorter',
+      short: 'Sort Lines',
+      description: 'Sort lines alphabetically, naturally, numerically, by length, reversed or randomly',
+      keywords: 'sort order alphabetical natural numeric length reverse shuffle lines',
+      modeDesc: 'Select how lines are ordered',
+      modeAlpha: 'Alphabetical',
+      modeNatural: 'Natural (file2 before file10)',
+      modeNumeric: 'Numeric (first number in line)',
+      modeLength: 'Line length',
+      modeReverse: 'Reverse line order',
+      modeRandom: 'Random',
+      shuffle: 'Shuffle again',
+      descending: 'Descending order',
+      caseSensitive: 'Case sensitive',
+      trim: 'Trim lines',
+      removeEmpty: 'Remove empty lines',
+    },
+    'zh-TW': {
+      title: '文字排序工具',
+      short: '排序',
+      description: '依字母、自然順序、數值、長度、反轉或隨機排序每一行',
+      keywords: '排序 順序 字母 自然 數字 長度 反轉 隨機 行',
+      modeDesc: '選擇每一行的排序方式',
+      modeAlpha: '字母順序',
+      modeNatural: '自然排序（file2 在 file10 之前）',
+      modeNumeric: '數值（每行第一個數字）',
+      modeLength: '行的長度',
+      modeReverse: '反轉行順序',
+      modeRandom: '隨機',
+      shuffle: '重新打亂',
+      descending: '遞減排序',
+      caseSensitive: '區分大小寫',
+      trim: '去除行首尾空白',
+      removeEmpty: '移除空白行',
     },
   },
 )
