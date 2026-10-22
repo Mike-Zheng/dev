@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { Images, Gauge, Maximize2, Download, Trash2 } from 'lucide-vue-next'
 import ConfigSection from '@/components/ui/ConfigSection.vue'
 import SettingCard from '@/components/ui/SettingCard.vue'
@@ -10,17 +10,13 @@ import DropZone from '@/components/ui/DropZone.vue'
 import IconButton from '@/components/ui/IconButton.vue'
 import { useI18n } from '@/i18n'
 import { downloadBlob, formatBytes } from '@/composables/useFiles'
+import { IMAGE_FORMATS, blobQuality, fitWithin, needsOpaqueBackground, outputFileName, type ImageFormat } from './imageConverter'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.image-converter.${k}`)
 
-type Fmt = 'image/png' | 'image/jpeg' | 'image/webp'
-const format = ref<Fmt>('image/png')
-const formatOptions: { value: Fmt; label: string }[] = [
-  { value: 'image/png', label: 'PNG' },
-  { value: 'image/jpeg', label: 'JPEG' },
-  { value: 'image/webp', label: 'WebP' },
-]
+const format = ref<ImageFormat>('image/png')
+const formatOptions = IMAGE_FORMATS.map(({ value, label }) => ({ value, label }))
 const quality = ref(90)
 const maxSize = ref(0)
 
@@ -37,8 +33,6 @@ interface Item {
 const items = ref<Item[]>([])
 let seq = 0
 
-const ext = computed(() => (format.value === 'image/png' ? 'png' : format.value === 'image/jpeg' ? 'jpg' : 'webp'))
-
 async function convert(it: Item) {
   it.busy = true
   it.error = ''
@@ -46,23 +40,17 @@ async function convert(it: Item) {
     const bmp = await createImageBitmap(it.file)
     it.width = bmp.width
     it.height = bmp.height
-    let w = bmp.width
-    let h = bmp.height
-    if (maxSize.value > 0 && (w > maxSize.value || h > maxSize.value)) {
-      const s = maxSize.value / Math.max(w, h)
-      w = Math.max(1, Math.round(w * s))
-      h = Math.max(1, Math.round(h * s))
-    }
+    const { width: w, height: h } = fitWithin(bmp.width, bmp.height, maxSize.value)
     const c = document.createElement('canvas')
     c.width = w
     c.height = h
     const ctx = c.getContext('2d')!
-    if (format.value === 'image/jpeg') {
+    if (needsOpaqueBackground(format.value)) {
       ctx.fillStyle = '#ffffff'
       ctx.fillRect(0, 0, w, h)
     }
     ctx.drawImage(bmp, 0, 0, w, h)
-    const blob = await new Promise<Blob | null>((res) => c.toBlob(res, format.value, quality.value / 100))
+    const blob = await new Promise<Blob | null>((res) => c.toBlob(res, format.value, blobQuality(quality.value)))
     if (!blob) throw new Error('toBlob failed')
     if (it.out) URL.revokeObjectURL(it.out.url)
     it.out = { blob, url: URL.createObjectURL(blob), width: w, height: h }
@@ -88,7 +76,7 @@ watch([format, quality, maxSize], () => {
 })
 
 function outName(it: Item) {
-  return `${it.file.name.replace(/\.[^.]+$/, '')}.${ext.value}`
+  return outputFileName(it.file.name, format.value)
 }
 function save(it: Item) {
   if (it.out) downloadBlob(it.out.blob, outName(it))
