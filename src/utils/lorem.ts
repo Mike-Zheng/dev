@@ -62,7 +62,7 @@ export function generate(corpus: CorpusId, type: 'words' | 'sentences' | 'paragr
   const classic = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit'
   if (type === 'words') {
     const ws = genWords(words, length)
-    if (startWithLorem && corpus === 'lorem') {
+    if (startWithLorem && corpus === 'lorem' && ws.length) {
       const head = classic.replace(/,/g, '').toLowerCase().split(' ')
       for (let i = 0; i < Math.min(head.length, ws.length); i++) ws[i] = head[i]!
       ws[0] = capitalize(ws[0]!)
