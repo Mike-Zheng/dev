@@ -120,20 +120,26 @@ body {
 /* Markdown preview (github-like) */
 .md-preview {
   @apply prose prose-sm md:prose-base max-w-none;
-  --tw-prose-links: var(--c-accent);
-  --tw-prose-invert-links: var(--c-accent);
+  --tw-prose-links: #0969da;
+  --tw-prose-pre-bg: #f6f8fa;
+  --tw-prose-pre-code: #1f2328;
+  --tw-prose-invert-links: #4493f8;
+  --tw-prose-invert-pre-bg: #161b22;
+  --tw-prose-invert-pre-code: #e6edf3;
 }
 .md-preview pre {
-  @apply bg-surface-2 border border-line rounded-lg;
+  border: 1px solid rgba(128, 128, 128, 0.2);
+  border-radius: 0.5rem;
 }
 .md-preview code {
   @apply font-mono;
 }
 .md-preview table {
-  @apply border border-line;
+  border: 1px solid rgba(128, 128, 128, 0.3);
 }
 .md-preview th, .md-preview td {
-  @apply border border-line px-2 py-1;
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  padding: 0.25rem 0.75rem;
 }
 
 /* Page transitions */
