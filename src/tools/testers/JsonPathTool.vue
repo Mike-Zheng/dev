@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { JSONPath } from 'jsonpath-plus'
 import { ChevronDown } from 'lucide-vue-next'
 import CodeEditor from '@/components/ui/CodeEditor.vue'
 import TextInput from '@/components/ui/TextInput.vue'
 import InfoBar from '@/components/ui/InfoBar.vue'
 import { useI18n } from '@/i18n'
+import { queryJsonPath } from './jsonPath'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.jsonpath.${k}`)
@@ -15,23 +15,8 @@ const path = ref('$')
 const showCheat = ref(false)
 
 const result = computed<{ output: string; error: string; info: string }>(() => {
-  const src = json.value.trim()
-  if (!src) return { output: '', error: '', info: '' }
-  let obj: unknown
-  try {
-    obj = JSON.parse(src)
-  } catch {
-    return { output: '', error: tt('invalidJson'), info: '' }
-  }
-  const p = path.value.trim()
-  if (!p) return { output: '', error: '', info: '' }
-  try {
-    const res = JSONPath({ path: p, json: obj as object, wrap: true }) as unknown[]
-    if (!res.length) return { output: '', error: '', info: tt('noMatch') }
-    return { output: JSON.stringify(res, null, 2), error: '', info: '' }
-  } catch {
-    return { output: '', error: tt('invalidPath'), info: '' }
-  }
+  const r = queryJsonPath(json.value, path.value)
+  return { output: r.output, error: r.error ? tt(r.error) : '', info: r.noMatch ? tt('noMatch') : '' }
 })
 
 const cheat = computed(() => [

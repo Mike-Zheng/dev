@@ -3,67 +3,40 @@ import { ref, watch } from 'vue'
 import CodeEditor from '@/components/ui/CodeEditor.vue'
 import InfoBar from '@/components/ui/InfoBar.vue'
 import { useI18n } from '@/i18n'
+import { validateXmlWithXsd, type XmlTestResult } from './xmlTester'
 
 const { t } = useI18n()
 const tt = (k: string, p?: Record<string, string>) => t(`tools.xml-tester.${k}`, p)
 
+type Status = { severity: 'info' | 'success' | 'warning' | 'error'; title: string; message?: string }
+
 const xsd = ref('')
 const xml = ref('')
-const status = ref<{ severity: 'info' | 'success' | 'warning' | 'error'; title: string; message?: string } | null>(null)
+const status = ref<Status | null>(null)
 let seq = 0
 let timer: number | undefined
 
-function wellFormed(src: string): string | null {
-  const doc = new DOMParser().parseFromString(src, 'application/xml')
-  const err = doc.querySelector('parsererror')
-  return err ? (err.textContent ?? '').split('\n')[0] ?? 'parse error' : null
-}
-
-function targetNamespace(xsdSrc: string): string | null {
-  const m = /targetNamespace\s*=\s*"([^"]+)"/.exec(xsdSrc)
-  return m?.[1] ?? null
+function toStatus(r: XmlTestResult): Status {
+  switch (r.kind) {
+    case 'needBoth':
+      return { severity: 'info', title: tt('needBoth') }
+    case 'malformedXml':
+    case 'malformedXsd':
+    case 'invalid':
+      return { severity: 'error', title: tt(r.kind), message: r.message }
+    case 'valid':
+      return r.missingNamespace
+        ? { severity: 'warning', title: tt('valid'), message: tt('nsHint', { ns: r.missingNamespace }) }
+        : { severity: 'success', title: tt('valid') }
+  }
 }
 
 async function validate() {
   const my = ++seq
-  const x = xml.value.trim()
-  const s = xsd.value.trim()
-  if (!x || !s) {
-    status.value = x || s ? { severity: 'info', title: tt('needBoth') } : null
-    return
-  }
-  const xmlErr = wellFormed(x)
-  if (xmlErr) {
-    status.value = { severity: 'error', title: tt('malformedXml'), message: xmlErr }
-    return
-  }
-  const xsdErr = wellFormed(s)
-  if (xsdErr) {
-    status.value = { severity: 'error', title: tt('malformedXsd'), message: xsdErr }
-    return
-  }
-  status.value = { severity: 'info', title: tt('loading') }
-  try {
-    const { validateXML } = await import('xmllint-wasm')
-    const res = await validateXML({
-      xml: [{ fileName: 'document.xml', contents: x }],
-      schema: [{ fileName: 'schema.xsd', contents: s }],
-    })
-    if (my !== seq) return
-    if (res.valid) {
-      const ns = targetNamespace(s)
-      if (ns && !x.includes(ns)) {
-        status.value = { severity: 'warning', title: tt('valid'), message: tt('nsHint', { ns }) }
-      } else {
-        status.value = { severity: 'success', title: tt('valid') }
-      }
-    } else {
-      const msg = res.errors.map((e) => (e.loc ? `line ${e.loc.lineNumber}: ${e.message}` : e.message)).join('\n')
-      status.value = { severity: 'error', title: tt('invalid'), message: msg || res.rawOutput }
-    }
-  } catch (e) {
-    if (my === seq) status.value = { severity: 'error', title: tt('invalid'), message: (e as Error).message }
-  }
+  const res = await validateXmlWithXsd(xml.value, xsd.value, () => {
+    status.value = { severity: 'info', title: tt('loading') }
+  })
+  if (my === seq) status.value = res && toStatus(res)
 }
 
 watch([xml, xsd], () => {

@@ -9,6 +9,7 @@ import TextInput from '@/components/ui/TextInput.vue'
 import InfoBar from '@/components/ui/InfoBar.vue'
 import { useI18n } from '@/i18n'
 import { useSettings } from '@/composables/useSettings'
+import { compileRegex, findMatches, toSegments, type MatchRow, type Segment } from './regex'
 
 const { t } = useI18n()
 const tt = (k: string, p?: Record<string, string | number>) => t(`tools.regex.${k}`, p)
@@ -23,69 +24,21 @@ const allMatches = ref(true)
 const unicode = ref(false)
 const showCheat = ref(false)
 
-interface MatchRow {
-  index: number
-  value: string
-  start: number
-  end: number
-  groups: { name: string; value: string }[]
-}
-
 const compiled = computed<{ re: RegExp | null; error: string }>(() => {
-  if (!pattern.value) return { re: null, error: '' }
-  let flags = 'd'
-  if (ignoreCase.value) flags += 'i'
-  if (multiline.value) flags += 'm'
-  if (singleline.value) flags += 's'
-  if (allMatches.value) flags += 'g'
-  if (unicode.value) flags += 'u'
-  try {
-    return { re: new RegExp(pattern.value, flags), error: '' }
-  } catch (e) {
-    return { re: null, error: `${tt('invalid')}: ${(e as Error).message}` }
-  }
+  const r = compileRegex(pattern.value, {
+    ignoreCase: ignoreCase.value,
+    multiline: multiline.value,
+    singleline: singleline.value,
+    allMatches: allMatches.value,
+    unicode: unicode.value,
+  })
+  return r.error ? { re: null, error: `${tt('invalid')}: ${r.error}` } : r
 })
 
-const matches = computed<MatchRow[]>(() => {
-  const re = compiled.value.re
-  if (!re || !text.value) return []
-  const rows: MatchRow[] = []
-  const src = text.value
-  if (!re.global) {
-    const m = re.exec(src)
-    if (m) rows.push(toRow(m, 0))
-    return rows
-  }
-  re.lastIndex = 0
-  let m: RegExpExecArray | null
-  let guard = 0
-  while ((m = re.exec(src)) !== null && guard++ < 10000) {
-    rows.push(toRow(m, rows.length))
-    if (m[0] === '') re.lastIndex++
-  }
-  return rows
-})
-
-function toRow(m: RegExpExecArray, index: number): MatchRow {
-  const groups: { name: string; value: string }[] = []
-  for (let i = 1; i < m.length; i++) groups.push({ name: String(i), value: m[i] ?? '' })
-  if (m.groups) for (const [k, v] of Object.entries(m.groups)) groups.push({ name: k, value: v ?? '' })
-  return { index, value: m[0], start: m.index, end: m.index + m[0].length, groups }
-}
+const matches = computed<MatchRow[]>(() => (compiled.value.re ? findMatches(compiled.value.re, text.value) : []))
 
 /** Text split into highlighted segments for rendering. */
-const segments = computed<{ text: string; hit: boolean }[]>(() => {
-  const src = text.value
-  const out: { text: string; hit: boolean }[] = []
-  let pos = 0
-  for (const m of matches.value) {
-    if (m.start > pos) out.push({ text: src.slice(pos, m.start), hit: false })
-    out.push({ text: src.slice(m.start, m.end), hit: true })
-    pos = m.end
-  }
-  if (pos < src.length) out.push({ text: src.slice(pos), hit: false })
-  return out
-})
+const segments = computed<Segment[]>(() => toSegments(text.value, matches.value))
 
 const cheat = computed(() => [
   { cat: tt('cs_anchors'), items: [['^', 'Beginning'], ['$', 'End'], ['\\b', 'Word boundary'], ['\\B', 'Not word boundary']] },
