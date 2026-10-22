@@ -57,7 +57,8 @@ src/
 1. 在 `src/tools/<group>/` 新增 `XxxTool.vue`。版面慣例：上方「Configuration」設定卡片區（`SettingCard`），下方輸入 / 輸出編輯器（`CodeEditor`），雙欄在 `lg` 以上並排、以下堆疊。
 2. 在 `src/i18n/locales/en.ts` 與 `zh-TW.ts` 的 `tools.<id>` 加入 `title`、`short`、`description`、`keywords` 與工具內字串。
 3. 在 `src/tools/registry.ts` 註冊：`id`、`group`、`icon`、`component: () => import(...)`。
-4. 執行 `npm run build` 確認型別與打包無誤。
+4. 運算邏輯放在同資料夾的純函式模組 `xxx.ts`（不依賴 Vue / i18n，錯誤以代碼回傳，由 `.vue` 對應成 `tt(...)` 訊息），並撰寫同層的 `xxx.test.ts`（Vitest；需要 DOM 時在檔案首行加 `// @vitest-environment jsdom`）。
+5. 執行 `npm test` 與 `npm run build` 確認測試、型別與打包無誤。
 
 ## 指令
 
@@ -65,6 +66,7 @@ src/
 npm install        # 安裝依賴
 npm run dev        # 開發伺服器
 npm run build      # vue-tsc 型別檢查 + 生產打包
+npm test           # Vitest 單元測試（npm run test:watch 為監看模式）
 npm run preview    # 預覽 dist
 ```
 
