@@ -1,4 +1,5 @@
 import type { Component } from 'vue'
+import { registerToolMessages, type ToolMessages } from '@/i18n'
 import {
   ArrowLeftRight,
   Binary,
@@ -43,4 +44,10 @@ export function toolsOfGroup(group: ToolGroupId): ToolDefinition[] {
 
 export function findTool(id: string): ToolDefinition | undefined {
   return tools.find((t) => t.id === id)
+}
+
+/** Register a tool and its i18n strings (eagerly, so sidebar/search can show titles). */
+export function defineTool(def: ToolDefinition, messages: ToolMessages) {
+  registerToolMessages(def.id, messages)
+  tools.push(def)
 }
