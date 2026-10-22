@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import yaml from 'js-yaml'
 import { ArrowLeftRight, IndentIncrease } from 'lucide-vue-next'
 import ConfigSection from '@/components/ui/ConfigSection.vue'
 import SettingCard from '@/components/ui/SettingCard.vue'
@@ -9,6 +8,7 @@ import BaseSelect from '@/components/ui/BaseSelect.vue'
 import CodeEditor from '@/components/ui/CodeEditor.vue'
 import InfoBar from '@/components/ui/InfoBar.vue'
 import { useI18n } from '@/i18n'
+import { convertJsonYaml } from './jsonYaml'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.json-yaml.${k}`)
@@ -22,22 +22,8 @@ const indentOptions = computed(() => [
 const input = ref('')
 
 const result = computed<{ output: string; error: string }>(() => {
-  const src = input.value
-  if (!src.trim()) return { output: '', error: '' }
-  if (jsonToYaml.value) {
-    try {
-      const obj: unknown = JSON.parse(src)
-      return { output: yaml.dump(obj, { indent: indent.value, lineWidth: -1, noRefs: true }), error: '' }
-    } catch {
-      return { output: '', error: tt('invalidJson') }
-    }
-  }
-  try {
-    const obj: unknown = yaml.load(src)
-    return { output: JSON.stringify(obj, null, indent.value), error: '' }
-  } catch {
-    return { output: '', error: tt('invalidYaml') }
-  }
+  const r = convertJsonYaml(input.value, jsonToYaml.value, indent.value)
+  return { output: r.output, error: r.error ? tt(r.error) : '' }
 })
 </script>
 

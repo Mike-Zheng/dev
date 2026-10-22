@@ -11,12 +11,11 @@ import InfoBar from '@/components/ui/InfoBar.vue'
 import IconButton from '@/components/ui/IconButton.vue'
 import { useI18n } from '@/i18n'
 import { useClipboard } from '@/composables/useClipboard'
+import { DEFAULT_DICT, convertAdvanced, convertSimple } from './numberBase'
 
 const { t } = useI18n()
 const tt = (k: string, p?: Record<string, string>) => t(`tools.number-base.${k}`, p)
 const { copy } = useClipboard()
-
-const DEFAULT_DICT = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+/'
 
 const formatNumber = ref(true)
 const advanced = ref(false)
@@ -35,81 +34,23 @@ const advOutputBase = ref(16)
 const advInputDict = ref(DEFAULT_DICT)
 const advOutputDict = ref(DEFAULT_DICT)
 
-function parseBig(text: string, base: number, dict: string): bigint | null {
-  let s = text.replace(/[\s,_]/g, '')
-  if (!s) return null
-  let neg = false
-  if (s.startsWith('-')) {
-    neg = true
-    s = s.slice(1)
-  }
-  if (base <= 36) s = s.toUpperCase()
-  const digits = dict.slice(0, base)
-  let v = 0n
-  const B = BigInt(base)
-  for (const ch of s) {
-    const i = digits.indexOf(ch)
-    if (i < 0) return null
-    v = v * B + BigInt(i)
-  }
-  return neg ? -v : v
-}
-
-function toBase(v: bigint, base: number, dict: string): string {
-  if (v === 0n) return dict[0] ?? '0'
-  const neg = v < 0n
-  let n = neg ? -v : v
-  const B = BigInt(base)
-  let out = ''
-  while (n > 0n) {
-    out = dict[Number(n % B)] + out
-    n /= B
-  }
-  return (neg ? '-' : '') + out
-}
-
-function group(s: string, size: number, sep: string): string {
-  const neg = s.startsWith('-')
-  const body = neg ? s.slice(1) : s
-  const parts: string[] = []
-  for (let i = body.length; i > 0; i -= size) parts.unshift(body.slice(Math.max(0, i - size), i))
-  return (neg ? '-' : '') + parts.join(sep)
-}
-
-function formatFor(s: string, base: number): string {
-  if (!formatNumber.value) return s
-  if (base === 10) return group(s, 3, ',')
-  if (base === 16) return group(s, 4, ' ')
-  if (base === 8) return group(s, 3, ' ')
-  if (base === 2) return group(s, 4, ' ')
-  return s
-}
-
 const simple = computed<{ rows: { base: number; label: string; value: string }[]; error: string }>(() => {
-  const src = input.value.trim()
-  if (!src) return { rows: [], error: '' }
-  const v = parseBig(src, inputBase.value, DEFAULT_DICT)
-  if (v === null) {
+  const r = convertSimple(input.value, inputBase.value, formatNumber.value)
+  if (r.error) {
     const label = baseOptions.value.find((o) => o.value === inputBase.value)?.label ?? ''
-    return { rows: [], error: tt('invalid', { base: label }) }
+    return { rows: [], error: tt(r.error, { base: label }) }
   }
-  const rows = [16, 10, 8, 2].map((b) => ({
-    base: b,
-    label: baseOptions.value.find((o) => o.value === b)?.label ?? String(b),
-    value: formatFor(toBase(v, b, DEFAULT_DICT), b),
+  const rows = r.rows.map((row) => ({
+    base: row.base,
+    label: baseOptions.value.find((o) => o.value === row.base)?.label ?? String(row.base),
+    value: row.value,
   }))
   return { rows, error: '' }
 })
 
 const adv = computed<{ value: string; error: string }>(() => {
-  const src = input.value.trim()
-  if (!src) return { value: '', error: '' }
-  if (advInputDict.value.length < 2 || advOutputDict.value.length < 2) return { value: '', error: tt('dictTooSmall') }
-  const ib = Math.min(advInputBase.value, advInputDict.value.length)
-  const ob = Math.min(advOutputBase.value, advOutputDict.value.length)
-  const v = parseBig(src, ib, advInputDict.value)
-  if (v === null) return { value: '', error: tt('invalid', { base: String(ib) }) }
-  return { value: toBase(v, ob, advOutputDict.value), error: '' }
+  const r = convertAdvanced(input.value, advInputBase.value, advOutputBase.value, advInputDict.value, advOutputDict.value)
+  return { value: r.value, error: r.error ? tt(r.error, { base: String(r.inputBase) }) : '' }
 })
 </script>
 

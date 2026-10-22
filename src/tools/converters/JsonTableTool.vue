@@ -10,12 +10,13 @@ import IconButton from '@/components/ui/IconButton.vue'
 import { useI18n } from '@/i18n'
 import { useClipboard } from '@/composables/useClipboard'
 import { downloadText } from '@/composables/useFiles'
+import { parseJsonTable, serializeTable, type TableData, type TableFormat } from './jsonTable'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.json-table.${k}`)
 const { copy } = useClipboard()
 
-type Fmt = 'csv' | 'tsv' | 'fsv'
+type Fmt = TableFormat
 const format = ref<Fmt>('csv')
 const formatOptions = computed(() => [
   { value: 'csv' as Fmt, label: tt('csv') },
@@ -25,47 +26,12 @@ const formatOptions = computed(() => [
 
 const input = ref('')
 
-interface TableData {
-  columns: string[]
-  rows: string[][]
-}
-
-function cellToString(v: unknown): string {
-  if (v === null || v === undefined) return ''
-  if (typeof v === 'object') return JSON.stringify(v)
-  return String(v)
-}
-
 const table = computed<{ data: TableData | null; error: string }>(() => {
-  const src = input.value.trim()
-  if (!src) return { data: null, error: '' }
-  try {
-    const parsed: unknown = JSON.parse(src)
-    if (!Array.isArray(parsed) || parsed.length === 0) return { data: null, error: tt('invalid') }
-    const columns: string[] = []
-    const objects: Record<string, unknown>[] = parsed.map((item: unknown) =>
-      item && typeof item === 'object' && !Array.isArray(item) ? (item as Record<string, unknown>) : { value: item },
-    )
-    for (const obj of objects) for (const k of Object.keys(obj)) if (!columns.includes(k)) columns.push(k)
-    const rows = objects.map((obj) => columns.map((c) => cellToString(obj[c])))
-    return { data: { columns, rows }, error: '' }
-  } catch {
-    return { data: null, error: tt('invalid') }
-  }
+  const r = parseJsonTable(input.value)
+  return { data: r.data, error: r.error ? tt(r.error) : '' }
 })
 
-function escapeCell(v: string, sep: string): string {
-  if (v.includes(sep) || v.includes('"') || v.includes('\n') || v.includes('\r')) return `"${v.replace(/"/g, '""')}"`
-  return v
-}
-
-const serialized = computed(() => {
-  const d = table.value.data
-  if (!d) return ''
-  const sep = format.value === 'csv' ? ',' : format.value === 'tsv' ? '\t' : ';'
-  const lines = [d.columns.map((c) => escapeCell(c, sep)).join(sep), ...d.rows.map((r) => r.map((c) => escapeCell(c, sep)).join(sep))]
-  return lines.join('\n')
-})
+const serialized = computed(() => (table.value.data ? serializeTable(table.value.data, format.value) : ''))
 
 function save() {
   const ext = format.value === 'tsv' ? 'tsv' : 'csv'

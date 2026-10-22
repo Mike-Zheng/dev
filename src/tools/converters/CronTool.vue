@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { CronExpressionParser } from 'cron-parser'
-import cronstrue from 'cronstrue'
-import 'cronstrue/locales/zh_TW'
 import { Clock, Hash, CalendarRange } from 'lucide-vue-next'
 import ConfigSection from '@/components/ui/ConfigSection.vue'
 import SettingCard from '@/components/ui/SettingCard.vue'
@@ -12,7 +9,7 @@ import TextInput from '@/components/ui/TextInput.vue'
 import CodeEditor from '@/components/ui/CodeEditor.vue'
 import InfoBar from '@/components/ui/InfoBar.vue'
 import { useI18n } from '@/i18n'
-import { formatDate, isValidFormat } from '@/utils/dateFormat'
+import { parseCron } from './cron'
 
 const { t, isZh } = useI18n()
 const tt = (k: string) => t(`tools.cron.${k}`)
@@ -23,23 +20,8 @@ const format = ref('yyyy-MM-dd ddd HH:mm:ss')
 const expression = ref('* * * * *')
 
 const result = computed<{ description: string; dates: string; error: string }>(() => {
-  const expr = expression.value.trim()
-  if (!expr) return { description: '', dates: '', error: '' }
-  if (!isValidFormat(format.value)) return { description: '', dates: '', error: tt('formatInvalid') }
-  const parts = expr.split(/\s+/)
-  const expectedParts = useSeconds.value ? 6 : 5
-  if (parts.length !== expectedParts) return { description: '', dates: '', error: tt('invalid') }
-  try {
-    const description = cronstrue.toString(expr, { locale: isZh.value ? 'zh_TW' : 'en', use24HourTimeFormat: true })
-    const it = CronExpressionParser.parse(expr)
-    const lines: string[] = []
-    for (let i = 0; i < count.value; i++) {
-      lines.push(formatDate(it.next().toDate(), format.value, isZh.value ? 'zh-TW' : 'en-US'))
-    }
-    return { description, dates: lines.join('\n'), error: '' }
-  } catch {
-    return { description: '', dates: '', error: tt('invalid') }
-  }
+  const r = parseCron(expression.value, { useSeconds: useSeconds.value, count: count.value, format: format.value, zh: isZh.value })
+  return { description: r.description, dates: r.dates.join('\n'), error: r.error ? tt(r.error) : '' }
 })
 </script>
 
