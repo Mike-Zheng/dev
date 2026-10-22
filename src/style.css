@@ -122,9 +122,12 @@ body {
 *::-webkit-scrollbar-thumb { background: var(--c-line-strong); border-radius: 999px; border: 3px solid transparent; background-clip: padding-box; }
 *::-webkit-scrollbar-track { background: transparent; }
 
-/* Focus ring */
-.focus-ring {
-  @apply outline-none focus-visible:ring-2 focus-visible:ring-accent/60 focus-visible:ring-offset-2 focus-visible:ring-offset-bg;
+/* Focus ring (utility so it can be used inside @apply) */
+@utility focus-ring {
+  outline: none;
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--c-bg), 0 0 0 4px color-mix(in srgb, var(--c-accent) 60%, transparent);
+  }
 }
 
 /* Markdown preview (github-like) */

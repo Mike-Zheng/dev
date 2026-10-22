@@ -1,8 +1,78 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { Menu, Moon, Sun } from 'lucide-vue-next'
+import AppSidebar from '@/components/layout/AppSidebar.vue'
+import Toaster from '@/components/ui/Toaster.vue'
+import { useI18n } from '@/i18n'
+import { useSettings } from '@/composables/useSettings'
+
+const { t } = useI18n()
+const { isDark, toggleTheme } = useSettings()
+const route = useRoute()
+const mobileOpen = ref(false)
+
+watch(
+  () => route.fullPath,
+  () => {
+    mobileOpen.value = false
+  },
+)
 </script>
 
 <template>
-  <main class="min-h-full flex items-center justify-center">
-    <h1 class="text-2xl font-semibold tracking-tight">DevToys Web</h1>
-  </main>
+  <div class="flex h-full overflow-hidden">
+    <!-- Desktop sidebar -->
+    <div class="hidden lg:block h-full shrink-0">
+      <AppSidebar :mobile-open="false" />
+    </div>
+
+    <!-- Mobile drawer -->
+    <Transition name="fade">
+      <div v-if="mobileOpen" class="fixed inset-0 z-40 lg:hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" @click="mobileOpen = false" />
+        <div class="absolute inset-y-0 left-0 shadow-2xl">
+          <AppSidebar :mobile-open="true" @close="mobileOpen = false" />
+        </div>
+      </div>
+    </Transition>
+
+    <!-- Main -->
+    <div class="flex min-w-0 flex-1 flex-col h-full">
+      <header class="flex h-14 shrink-0 items-center gap-2 border-b border-line bg-bg/80 px-3 backdrop-blur lg:hidden">
+        <button
+          type="button"
+          class="inline-flex h-9 w-9 items-center justify-center rounded-md text-fg-muted hover:bg-surface-2 hover:text-fg focus-ring"
+          :title="t('app.toggleNav')"
+          @click="mobileOpen = true"
+        >
+          <Menu class="h-5 w-5" />
+        </button>
+        <RouterLink to="/" class="flex items-center gap-2 font-semibold tracking-tight">
+          <img src="/favicon.svg" alt="" class="h-7 w-7" />
+          DevToys <span class="text-accent">Web</span>
+        </RouterLink>
+        <span class="flex-1" />
+        <button
+          type="button"
+          class="inline-flex h-9 w-9 items-center justify-center rounded-md text-fg-muted hover:bg-surface-2 hover:text-fg focus-ring"
+          :title="t('app.theme')"
+          @click="toggleTheme"
+        >
+          <Sun v-if="isDark" class="h-5 w-5" />
+          <Moon v-else class="h-5 w-5" />
+        </button>
+      </header>
+
+      <main class="relative flex-1 min-h-0 overflow-y-auto">
+        <RouterView v-slot="{ Component }">
+          <Transition name="fade" mode="out-in">
+            <component :is="Component" :key="route.fullPath" />
+          </Transition>
+        </RouterView>
+      </main>
+    </div>
+
+    <Toaster />
+  </div>
 </template>
