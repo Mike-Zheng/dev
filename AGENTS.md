@@ -46,7 +46,7 @@ src/
     encoders/             Base64Text、Base64Image、Certificate、GZip、Html、Jwt、QrCode、Url
     formatters/           Json、Sql、Xml
     generators/           AsciiArt、Hash、LoremIpsum、Password、Uuid
-    graphic/              ColorBlindness、ImageConverter
+    graphic/              ColorBlindness、ImageConverter、TriangleGradient
     testers/              JsonPath、RegEx、Xml
     text/                 Analyzer、Compare、EscapeUnescape、ListCompare、MarkdownPreview
   pages/                  HomePage、GroupPage、ToolPage、SettingsPage

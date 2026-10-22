@@ -1,7 +1,7 @@
 # DevToys Web
 
 以 Vue 3 + Vite + Tailwind CSS 重現 [DevToys](https://github.com/DevToys-app/DevToys) 的網頁版本。
-35 個開發者小工具全部在瀏覽器端執行，不需要後端、不上傳任何資料。
+36 個開發者小工具全部在瀏覽器端執行，不需要後端、不上傳任何資料。
 
 ## 工具清單
 
@@ -11,7 +11,7 @@
 | 編碼 / 解碼 | Base64 文字、Base64 圖片、憑證解碼（X.509）、GZip、HTML、JWT（解碼 / 驗證 / 簽署）、MD5（產生 / 驗證）、QR 碼（產生 / 讀取）、URL |
 | 格式化 | JSON、SQL（多種方言）、XML |
 | 產生器 | 雜湊值 / 檢查碼（MD5、SHA1/256/384/512、CRC32、HMAC、檔案）、Lorem Ipsum、密碼、UUID（v1 / v4 / v7）、ASCII 藝術字（335 種 FIGlet 字型） |
-| 圖形 | 色盲模擬、圖片轉檔（PNG / JPEG / WebP、縮放） |
+| 圖形 | 色盲模擬、圖片轉檔（PNG / JPEG / WebP、縮放）、三角漸層圖（低多邊形背景，PNG / SVG 匯出） |
 | 測試 | JSONPath、正規表達式、XML / XSD 驗證 |
 | 文字 | 文字分析與實用工具（統計、大小寫、排序）、文字比較（diff）、跳脫 / 取消跳脫、清單比較、刪除重複行、文字排序、Markdown 預覽 |
 
