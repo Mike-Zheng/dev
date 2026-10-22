@@ -25,6 +25,10 @@ const props = withDefaults(
     noActions?: boolean
     /** Fill the available height of the parent flex container. */
     fill?: boolean
+    /** Initial word wrap state; defaults to the user's setting. */
+    defaultWrap?: boolean
+    /** Tight line height, for content like ASCII art where rows must touch. */
+    tight?: boolean
   }>(),
   {
     readonly: false,
@@ -36,6 +40,8 @@ const props = withDefaults(
     mono: true,
     noActions: false,
     fill: false,
+    defaultWrap: undefined,
+    tight: false,
   },
 )
 
@@ -45,7 +51,7 @@ const { t } = useI18n()
 const { copy, paste } = useClipboard()
 const { wordWrap, editorFontSize } = useSettings()
 
-const wrap = ref(wordWrap.value)
+const wrap = ref(props.defaultWrap ?? wordWrap.value)
 const dragging = ref(false)
 const textarea = ref<HTMLTextAreaElement | null>(null)
 
@@ -136,8 +142,8 @@ defineExpose({ focus: () => textarea.value?.focus() })
       autocapitalize="off"
       autocomplete="off"
       autocorrect="off"
-      class="w-full flex-1 resize-y bg-transparent px-3 py-2.5 text-fg placeholder:text-fg-faint outline-none leading-relaxed"
-      :class="[heightClass, mono ? 'font-mono' : 'font-sans', wrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto', readonly ? 'text-fg/90' : '', fill ? 'resize-none' : '']"
+      class="w-full flex-1 resize-y bg-transparent px-3 py-2.5 text-fg placeholder:text-fg-faint outline-none"
+      :class="[heightClass, tight ? 'leading-tight' : 'leading-relaxed', mono ? 'font-mono' : 'font-sans', wrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto', readonly ? 'text-fg/90' : '', fill ? 'resize-none' : '']"
       :style="{ fontSize: editorFontSize + 'px' }"
       @keydown="onKeydown"
     />
