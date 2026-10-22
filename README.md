@@ -7,7 +7,7 @@
 
 | 群組 | 工具 |
 | --- | --- |
-| 轉換器 | Cron 表達式剖析、日期轉換（時間戳記 / 時區）、JSON 陣列轉表格（CSV / TSV）、JSON <> YAML、數值進位轉換 |
+| 轉換器 | Cron 表達式剖析、日期轉換（時間戳記 / 時區）、JSON 陣列轉表格（CSV / TSV）、JSON <> YAML、數值進位轉換、Unicode 字碼轉換（字元 ↔ 碼位 / UTF-8 / UTF-16 / NCR / 各語言跳脫） |
 | 編碼 / 解碼 | Base64 文字、Base64 圖片、憑證解碼（X.509）、GZip、HTML、JWT（解碼 / 驗證 / 簽署）、QR 碼（產生 / 讀取）、URL |
 | 格式化 | JSON、SQL（多種方言）、XML |
 | 產生器 | 雜湊值 / 檢查碼（MD5、SHA1/256/384/512、CRC32、HMAC、檔案）、Lorem Ipsum、密碼、UUID（v1 / v4 / v7） |

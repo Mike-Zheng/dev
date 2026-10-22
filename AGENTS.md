@@ -42,7 +42,7 @@ src/
     ui/                   Button、Switch、Select、NumberInput、CodeEditor、SettingCard、InfoBar ...
   tools/
     registry.ts           工具與群組的註冊表（id、群組、圖示、懶載入元件、搜尋關鍵字）
-    converters/           Cron、Date、JsonTable、JsonYaml、NumberBase
+    converters/           Cron、Date、JsonTable、JsonYaml、NumberBase、Unicode
     encoders/             Base64Text、Base64Image、Certificate、GZip、Html、Jwt、QrCode、Url
     formatters/           Json、Sql、Xml
     generators/           Hash、LoremIpsum、Password、Uuid

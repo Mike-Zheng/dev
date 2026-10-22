@@ -114,7 +114,7 @@ defineExpose({ focus: () => textarea.value?.focus() })
     @dragleave="dragging = false"
     @drop.prevent="onDrop"
   >
-    <div class="flex items-center gap-1 border-b border-line bg-surface-2/60 px-2 py-1.5 min-h-[38px]">
+    <div class="flex flex-wrap items-center gap-1 border-b border-line bg-surface-2/60 px-2 py-1.5 min-h-[38px]">
       <span v-if="label" class="px-1.5 text-xs font-semibold uppercase tracking-wider text-fg-muted truncate">{{ label }}</span>
       <span class="flex-1" />
       <slot name="actions" />
