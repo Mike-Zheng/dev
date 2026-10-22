@@ -7,14 +7,14 @@ import BaseSwitch from '@/components/ui/BaseSwitch.vue'
 import BaseSelect from '@/components/ui/BaseSelect.vue'
 import CodeEditor from '@/components/ui/CodeEditor.vue'
 import { useI18n } from '@/i18n'
+import { compareLists, type ListMode } from './listCompare'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.list-compare.${k}`)
 
-type Mode = 'inter' | 'union' | 'aOnly' | 'bOnly'
 const caseSensitive = ref(true)
-const mode = ref<Mode>('inter')
-const modeOptions = computed<{ value: Mode; label: string }[]>(() => [
+const mode = ref<ListMode>('inter')
+const modeOptions = computed<{ value: ListMode; label: string }[]>(() => [
   { value: 'inter', label: tt('aInterB') },
   { value: 'union', label: tt('aUnionB') },
   { value: 'aOnly', label: tt('aOnly') },
@@ -23,48 +23,7 @@ const modeOptions = computed<{ value: Mode; label: string }[]>(() => [
 const a = ref('')
 const b = ref('')
 
-function items(s: string): string[] {
-  return s
-    .split(/\r\n|\r|\n/)
-    .map((l) => l.trim())
-    .filter(Boolean)
-}
-const key = (s: string) => (caseSensitive.value ? s : s.toLowerCase())
-
-function unique(list: string[]): string[] {
-  const seen = new Set<string>()
-  const out: string[] = []
-  for (const it of list) {
-    const k = key(it)
-    if (!seen.has(k)) {
-      seen.add(k)
-      out.push(it)
-    }
-  }
-  return out
-}
-
-const output = computed(() => {
-  const la = unique(items(a.value))
-  const lb = unique(items(b.value))
-  const sa = new Set(la.map(key))
-  const sb = new Set(lb.map(key))
-  let res: string[]
-  switch (mode.value) {
-    case 'inter':
-      res = la.filter((x) => sb.has(key(x)))
-      break
-    case 'union':
-      res = unique([...la, ...lb])
-      break
-    case 'aOnly':
-      res = la.filter((x) => !sb.has(key(x)))
-      break
-    default:
-      res = lb.filter((x) => !sa.has(key(x)))
-  }
-  return res.join('\n')
-})
+const output = computed(() => compareLists(a.value, b.value, mode.value, caseSensitive.value).join('\n'))
 const count = computed(() => (output.value ? output.value.split('\n').length : 0))
 </script>
 

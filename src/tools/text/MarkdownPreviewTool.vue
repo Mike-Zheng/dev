@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { marked } from 'marked'
-import DOMPurify from 'dompurify'
 import { Palette, Download } from 'lucide-vue-next'
 import ConfigSection from '@/components/ui/ConfigSection.vue'
 import SettingCard from '@/components/ui/SettingCard.vue'
@@ -11,6 +9,7 @@ import IconButton from '@/components/ui/IconButton.vue'
 import { useI18n } from '@/i18n'
 import { useSettings } from '@/composables/useSettings'
 import { downloadText } from '@/composables/useFiles'
+import { htmlDocument, renderMarkdown } from './markdown'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.markdown.${k}`)
@@ -25,16 +24,10 @@ const themeOptions = computed<{ value: Theme; label: string }[]>(() => [
 
 const input = ref(`# DevToys Web\n\nA **Swiss Army knife** for developers, _in your browser_.\n\n- Converters\n- Encoders / Decoders\n- Formatters\n\n\`\`\`ts\nconst answer = 42\n\`\`\`\n\n| Tool | Group |\n| --- | --- |\n| JSON | Formatters |\n\n> Everything runs locally.\n`)
 
-marked.setOptions({ gfm: true, breaks: false })
-
-const html = computed(() => {
-  const raw = marked.parse(input.value, { async: false }) as string
-  return DOMPurify.sanitize(raw, { USE_PROFILES: { html: true } })
-})
+const html = computed(() => renderMarkdown(input.value))
 
 function exportHtml() {
-  const doc = `<!doctype html><html><head><meta charset="utf-8"><title>Markdown</title></head><body>${html.value}</body></html>`
-  downloadText(doc, 'markdown.html', 'text/html')
+  downloadText(htmlDocument(html.value), 'markdown.html', 'text/html')
 }
 </script>
 
