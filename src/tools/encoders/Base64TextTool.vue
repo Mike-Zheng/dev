@@ -8,13 +8,13 @@ import BaseSelect from '@/components/ui/BaseSelect.vue'
 import CodeEditor from '@/components/ui/CodeEditor.vue'
 import InfoBar from '@/components/ui/InfoBar.vue'
 import { useI18n } from '@/i18n'
-import { bytesToBase64, base64ToBytes } from '@/utils/base64'
+import { decodeText, encodeText, type TextEncoding } from './base64Text'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.base64-text.${k}`)
 
 const encode = ref(true)
-const encoding = ref<'utf8' | 'ascii'>('utf8')
+const encoding = ref<TextEncoding>('utf8')
 const urlSafe = ref(false)
 const input = ref('')
 
@@ -27,16 +27,8 @@ const result = computed<{ output: string; error: string }>(() => {
   const src = input.value
   if (!src) return { output: '', error: '' }
   try {
-    if (encode.value) {
-      const bytes =
-        encoding.value === 'utf8'
-          ? new TextEncoder().encode(src)
-          : Uint8Array.from(src, (c) => c.charCodeAt(0) & 0x7f)
-      return { output: bytesToBase64(bytes, urlSafe.value), error: '' }
-    }
-    const bytes = base64ToBytes(src)
-    const text = encoding.value === 'utf8' ? new TextDecoder('utf-8', { fatal: false }).decode(bytes) : String.fromCharCode(...bytes)
-    return { output: text, error: '' }
+    const output = encode.value ? encodeText(src, encoding.value, urlSafe.value) : decodeText(src, encoding.value)
+    return { output, error: '' }
   } catch {
     return { output: '', error: tt('invalid') }
   }

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import * as jose from 'jose'
 import { Clock, KeyRound, ShieldCheck, Wrench } from 'lucide-vue-next'
 import ConfigSection from '@/components/ui/ConfigSection.vue'
 import SettingCard from '@/components/ui/SettingCard.vue'
@@ -11,6 +10,7 @@ import CodeEditor from '@/components/ui/CodeEditor.vue'
 import InfoBar from '@/components/ui/InfoBar.vue'
 import BaseButton from '@/components/ui/BaseButton.vue'
 import { useI18n } from '@/i18n'
+import { algorithms, decodeToken as decodeJwt, readClaims, signToken, verifyToken } from './jwt'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.jwt.${k}`)
@@ -27,28 +27,7 @@ const signature = ref('')
 const decodeError = ref('')
 const verifyStatus = ref<{ ok: boolean; msg: string } | null>(null)
 
-interface ClaimRow {
-  name: string
-  value: string
-  desc: string
-}
-
-const claims = computed<ClaimRow[]>(() => {
-  if (!payload.value) return []
-  try {
-    const obj = JSON.parse(payload.value) as Record<string, unknown>
-    const known = ['iss', 'sub', 'aud', 'exp', 'nbf', 'iat', 'jti']
-    return Object.entries(obj).map(([k, v]) => {
-      let value = typeof v === 'string' ? v : JSON.stringify(v)
-      if (['exp', 'nbf', 'iat'].includes(k) && typeof v === 'number') {
-        value = `${v} → ${new Date(v * 1000).toISOString()}`
-      }
-      return { name: k, value, desc: known.includes(k) ? tt(`c_${k}`) : '' }
-    })
-  } catch {
-    return []
-  }
-})
+const claims = computed(() => readClaims(payload.value).map((c) => ({ ...c, desc: c.known ? tt(`c_${c.name}`) : '' })))
 
 function decodeToken(v: string) {
   decodeError.value = ''
@@ -59,39 +38,22 @@ function decodeToken(v: string) {
     return
   }
   try {
-    const h = jose.decodeProtectedHeader(s)
-    const p = jose.decodeJwt(s)
-    header.value = JSON.stringify(h, null, 2)
-    payload.value = JSON.stringify(p, null, 2)
-    signature.value = s.split('.')[2] ?? ''
+    const d = decodeJwt(s)
+    header.value = d.header
+    payload.value = d.payload
+    signature.value = d.signature
   } catch {
     header.value = payload.value = signature.value = ''
     decodeError.value = tt('invalidToken')
   }
 }
 
-async function importVerifyKey(alg: string, raw: string): Promise<jose.CryptoKey | Uint8Array> {
-  if (alg.startsWith('HS')) return new TextEncoder().encode(raw)
-  if (raw.includes('-----BEGIN')) return jose.importSPKI(raw, alg)
-  return jose.importJWK(JSON.parse(raw) as jose.JWK, alg)
-}
-
 async function verify() {
   verifyStatus.value = null
   const s = token.value.trim()
   if (!s || !validate.value) return
-  try {
-    const h = jose.decodeProtectedHeader(s)
-    const alg = h.alg ?? 'HS256'
-    const key = await importVerifyKey(alg, secret.value)
-    await jose.jwtVerify(s, key)
-    verifyStatus.value = { ok: true, msg: tt('valid') }
-  } catch (e) {
-    const code = (e as { code?: string }).code
-    if (code === 'ERR_JWT_EXPIRED') verifyStatus.value = { ok: false, msg: tt('expired') }
-    else if (code === 'ERR_JWT_CLAIM_VALIDATION_FAILED' && String(e).includes('nbf')) verifyStatus.value = { ok: false, msg: tt('notYet') }
-    else verifyStatus.value = { ok: false, msg: tt('invalidSig') }
-  }
+  const r = await verifyToken(s, secret.value)
+  verifyStatus.value = r.ok ? { ok: true, msg: tt('valid') } : { ok: false, msg: tt(r.error) }
 }
 
 watch(token, (v) => {
@@ -101,7 +63,7 @@ watch(token, (v) => {
 watch([validate, secret], () => void verify())
 
 /* ---------------- Encode ---------------- */
-const algOptions = ['HS256', 'HS384', 'HS512', 'RS256', 'RS384', 'RS512', 'PS256', 'PS384', 'PS512', 'ES256', 'ES384', 'ES512'].map((a) => ({ value: a, label: a }))
+const algOptions = algorithms.map((a) => ({ value: a, label: a }))
 const alg = ref('HS256')
 const encHeader = ref('{\n  "typ": "JWT"\n}')
 const encPayload = ref('{\n  "sub": "1234567890",\n  "name": "John Doe"\n}')
@@ -111,21 +73,16 @@ const expiresIn = ref(60)
 const encOutput = ref('')
 const encError = ref('')
 
-async function importSignKey(a: string, raw: string): Promise<jose.CryptoKey | Uint8Array> {
-  if (a.startsWith('HS')) return new TextEncoder().encode(raw)
-  if (raw.includes('-----BEGIN')) return jose.importPKCS8(raw, a)
-  return jose.importJWK(JSON.parse(raw) as jose.JWK, a)
-}
-
 async function generate() {
   encError.value = ''
   try {
-    const h = JSON.parse(encHeader.value || '{}') as Record<string, unknown>
-    const p = JSON.parse(encPayload.value || '{}') as jose.JWTPayload
-    const key = await importSignKey(alg.value, encSecret.value)
-    let builder = new jose.SignJWT(p).setProtectedHeader({ ...h, alg: alg.value, typ: (h.typ as string) ?? 'JWT' })
-    if (hasExpiration.value) builder = builder.setIssuedAt().setExpirationTime(`${expiresIn.value}m`)
-    encOutput.value = await builder.sign(key)
+    encOutput.value = await signToken({
+      alg: alg.value,
+      header: encHeader.value,
+      payload: encPayload.value,
+      key: encSecret.value,
+      expiresInMinutes: hasExpiration.value ? expiresIn.value : undefined,
+    })
   } catch (e) {
     encOutput.value = ''
     encError.value = `${tt('encodeError')}: ${(e as Error).message}`

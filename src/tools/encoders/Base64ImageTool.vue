@@ -10,7 +10,7 @@ import InfoBar from '@/components/ui/InfoBar.vue'
 import IconButton from '@/components/ui/IconButton.vue'
 import { useI18n } from '@/i18n'
 import { readFileAsDataUrl, downloadBlob, formatBytes } from '@/composables/useFiles'
-import { base64ToBytes } from '@/utils/base64'
+import { baseFileName, dataUrlPayload, decodeDataUrl, decodedSize, toPreviewUrl } from './base64Image'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.base64-image.${k}`)
@@ -21,47 +21,36 @@ const error = ref('')
 const fileName = ref('image')
 const rawDataUrl = ref('')
 
-const previewUrl = computed(() => {
-  const v = base64.value.trim()
-  if (!v) return ''
-  if (v.startsWith('data:')) return v
-  return `data:image/png;base64,${v.replace(/\s+/g, '')}`
-})
+const previewUrl = computed(() => toPreviewUrl(base64.value))
 
 const sizeLabel = computed(() => {
-  const v = base64.value.trim()
-  if (!v) return ''
-  try {
-    const b64 = v.startsWith('data:') ? v.slice(v.indexOf(',') + 1) : v
-    return formatBytes(base64ToBytes(b64).length)
-  } catch {
-    return ''
-  }
+  const size = decodedSize(base64.value)
+  return size === null ? '' : formatBytes(size)
 })
 
 async function onFiles(files: File[]) {
   const f = files[0]
   if (!f) return
   error.value = ''
-  fileName.value = f.name.replace(/\.[^.]+$/, '') || 'image'
+  fileName.value = baseFileName(f.name)
   rawDataUrl.value = await readFileAsDataUrl(f)
   applyPrefix()
 }
 
 function applyPrefix() {
   if (!rawDataUrl.value) return
-  base64.value = withPrefix.value ? rawDataUrl.value : rawDataUrl.value.slice(rawDataUrl.value.indexOf(',') + 1)
+  base64.value = withPrefix.value ? rawDataUrl.value : dataUrlPayload(rawDataUrl.value)
 }
 
 watch(withPrefix, () => {
-  if (rawDataUrl.value && (base64.value === rawDataUrl.value || base64.value === rawDataUrl.value.slice(rawDataUrl.value.indexOf(',') + 1))) {
+  if (rawDataUrl.value && (base64.value === rawDataUrl.value || base64.value === dataUrlPayload(rawDataUrl.value))) {
     applyPrefix()
   }
 })
 
 watch(base64, (v) => {
   error.value = ''
-  if (v && !v.startsWith('data:') && rawDataUrl.value && v !== rawDataUrl.value.slice(rawDataUrl.value.indexOf(',') + 1)) {
+  if (v && !v.startsWith('data:') && rawDataUrl.value && v !== dataUrlPayload(rawDataUrl.value)) {
     rawDataUrl.value = ''
   }
 })
@@ -73,10 +62,8 @@ function onImageError() {
 function download() {
   const url = previewUrl.value
   if (!url) return
-  const mime = url.slice(5, url.indexOf(';')) || 'image/png'
-  const ext = mime.split('/')[1]?.split('+')[0] ?? 'png'
   try {
-    const bytes = base64ToBytes(url.slice(url.indexOf(',') + 1))
+    const { bytes, mime, ext } = decodeDataUrl(url)
     downloadBlob(new Blob([bytes as BlobPart], { type: mime }), `${fileName.value}.${ext}`)
   } catch {
     error.value = tt('invalid')

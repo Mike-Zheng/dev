@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { FileArchive } from 'lucide-vue-next'
-import { gzip, ungzip } from 'pako'
 import ConfigSection from '@/components/ui/ConfigSection.vue'
 import SettingCard from '@/components/ui/SettingCard.vue'
 import BaseSwitch from '@/components/ui/BaseSwitch.vue'
 import CodeEditor from '@/components/ui/CodeEditor.vue'
 import InfoBar from '@/components/ui/InfoBar.vue'
 import { useI18n } from '@/i18n'
-import { bytesToBase64, base64ToBytes } from '@/utils/base64'
+import { compressText, decompressText } from './gzip'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.gzip.${k}`)
@@ -20,16 +19,8 @@ const result = computed<{ output: string; error: string; ratio: number | null }>
   const src = input.value
   if (!src) return { output: '', error: '', ratio: null }
   try {
-    if (compress.value) {
-      const bytes = new TextEncoder().encode(src)
-      const gz = gzip(bytes)
-      const ratio = bytes.length ? (1 - gz.length / bytes.length) * 100 : 0
-      return { output: bytesToBase64(gz), error: '', ratio }
-    }
-    const gz = base64ToBytes(src)
-    const out = ungzip(gz)
-    const ratio = out.length ? (1 - gz.length / out.length) * 100 : 0
-    return { output: new TextDecoder().decode(out), error: '', ratio }
+    const { output, ratio } = compress.value ? compressText(src) : decompressText(src)
+    return { output, error: '', ratio }
   } catch {
     return { output: '', error: tt('invalid'), ratio: null }
   }

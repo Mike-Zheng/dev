@@ -7,6 +7,7 @@ import BaseSwitch from '@/components/ui/BaseSwitch.vue'
 import CodeEditor from '@/components/ui/CodeEditor.vue'
 import InfoBar from '@/components/ui/InfoBar.vue'
 import { useI18n } from '@/i18n'
+import { convertUrl } from './url'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.url.${k}`)
@@ -15,20 +16,11 @@ const encode = ref(true)
 const multiline = ref(false)
 const input = ref('')
 
-function enc(s: string) {
-  return encodeURIComponent(s).replace(/[!'()*]/g, (c) => '%' + c.charCodeAt(0).toString(16).toUpperCase())
-}
-function dec(s: string) {
-  return decodeURIComponent(s.replace(/\+/g, '%20'))
-}
-
 const result = computed<{ output: string; error: string }>(() => {
   const src = input.value
   if (!src) return { output: '', error: '' }
-  const fn = encode.value ? enc : dec
   try {
-    if (multiline.value) return { output: src.split(/\r?\n/).map(fn).join('\n'), error: '' }
-    return { output: fn(src), error: '' }
+    return { output: convertUrl(src, encode.value, multiline.value), error: '' }
   } catch {
     return { output: '', error: tt('invalid') }
   }

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import QRCode from 'qrcode'
-import jsQR from 'jsqr'
 import { Download, Shield } from 'lucide-vue-next'
 import ConfigSection from '@/components/ui/ConfigSection.vue'
 import SettingCard from '@/components/ui/SettingCard.vue'
@@ -12,18 +11,12 @@ import InfoBar from '@/components/ui/InfoBar.vue'
 import IconButton from '@/components/ui/IconButton.vue'
 import { useI18n } from '@/i18n'
 import { downloadBlob, downloadText } from '@/composables/useFiles'
+import { canvasOptions, decodeQr, levels as levelOptions, svgOptions, type Level } from './qrCode'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.qrcode.${k}`)
 
-type Level = 'L' | 'M' | 'Q' | 'H'
 const level = ref<Level>('M')
-const levelOptions: { value: Level; label: string }[] = [
-  { value: 'L', label: 'L (7%)' },
-  { value: 'M', label: 'M (15%)' },
-  { value: 'Q', label: 'Q (25%)' },
-  { value: 'H', label: 'H (30%)' },
-]
 
 const text = ref('https://devtoys.app')
 const canvas = ref<HTMLCanvasElement | null>(null)
@@ -41,7 +34,7 @@ async function render() {
     return
   }
   try {
-    await QRCode.toCanvas(el, text.value, { errorCorrectionLevel: level.value, width: 320, margin: 2, color: { dark: '#000000', light: '#ffffff' } })
+    await QRCode.toCanvas(el, text.value, canvasOptions(level.value))
     hasQr.value = true
   } catch (e) {
     hasQr.value = false
@@ -58,7 +51,7 @@ function exportPng() {
 
 async function exportSvg() {
   if (!text.value) return
-  const svg = await QRCode.toString(text.value, { type: 'svg', errorCorrectionLevel: level.value, margin: 2 })
+  const svg = await QRCode.toString(text.value, svgOptions(level.value))
   downloadText(svg, 'qrcode.svg', 'image/svg+xml')
 }
 
@@ -81,8 +74,8 @@ async function decodeImage(files: File[]) {
     if (!ctx) return
     ctx.drawImage(img, 0, 0)
     const data = ctx.getImageData(0, 0, c.width, c.height)
-    const code = jsQR(data.data, data.width, data.height)
-    if (code?.data) text.value = code.data
+    const decoded = decodeQr(data.data, data.width, data.height)
+    if (decoded) text.value = decoded
     else error.value = tt('noQr')
   } catch {
     error.value = tt('noQr')

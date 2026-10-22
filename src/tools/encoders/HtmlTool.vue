@@ -6,30 +6,13 @@ import SettingCard from '@/components/ui/SettingCard.vue'
 import BaseSwitch from '@/components/ui/BaseSwitch.vue'
 import CodeEditor from '@/components/ui/CodeEditor.vue'
 import { useI18n } from '@/i18n'
+import { htmlDecode, htmlEncode } from './html'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.html.${k}`)
 
 const encode = ref(true)
 const input = ref('')
-
-const named: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }
-
-function htmlEncode(s: string): string {
-  let out = ''
-  for (const ch of s) {
-    const code = ch.codePointAt(0) ?? 0
-    if (named[ch]) out += named[ch]
-    else if (code >= 160) out += `&#${code};`
-    else out += ch
-  }
-  return out
-}
-
-function htmlDecode(s: string): string {
-  const doc = new DOMParser().parseFromString(`<!doctype html><body>${s}`, 'text/html')
-  return doc.body.textContent ?? ''
-}
 
 const output = computed(() => {
   if (!input.value) return ''
