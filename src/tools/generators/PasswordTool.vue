@@ -10,14 +10,10 @@ import CodeEditor from '@/components/ui/CodeEditor.vue'
 import InfoBar from '@/components/ui/InfoBar.vue'
 import IconButton from '@/components/ui/IconButton.vue'
 import { useI18n } from '@/i18n'
+import { entropyBits, generatePasswords, passwordAlphabet, type PasswordOptions } from './password'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.password.${k}`)
-
-const UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-const LOWER = 'abcdefghijklmnopqrstuvwxyz'
-const DIGITS = '0123456789'
-const SPECIAL = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
 
 const length = ref(30)
 const count = ref(1)
@@ -28,56 +24,19 @@ const useSpecial = ref(true)
 const exclude = ref('')
 const output = ref('')
 
-const alphabet = computed(() => {
-  const ex = new Set(exclude.value)
-  let chars = ''
-  if (useUpper.value) chars += UPPER
-  if (useLower.value) chars += LOWER
-  if (useDigits.value) chars += DIGITS
-  if (useSpecial.value) chars += SPECIAL
-  return Array.from(chars).filter((c) => !ex.has(c))
-})
-
-const entropyBits = computed(() => (alphabet.value.length > 1 ? Math.round(length.value * Math.log2(alphabet.value.length)) : 0))
-
-function randomInt(n: number): number {
-  const limit = Math.floor(0x100000000 / n) * n
-  const buf = new Uint32Array(1)
-  let v: number
-  do {
-    crypto.getRandomValues(buf)
-    v = buf[0]!
-  } while (v >= limit)
-  return v % n
-}
-
-function onePassword(): string {
-  const sets = [
-    useUpper.value ? UPPER : '',
-    useLower.value ? LOWER : '',
-    useDigits.value ? DIGITS : '',
-    useSpecial.value ? SPECIAL : '',
-  ]
-    .map((s) => Array.from(s).filter((c) => !exclude.value.includes(c)))
-    .filter((s) => s.length > 0)
-  const all = alphabet.value
-  const chars: string[] = []
-  // guarantee at least one char of each enabled set when length allows
-  for (const s of sets) if (chars.length < length.value) chars.push(s[randomInt(s.length)]!)
-  while (chars.length < length.value) chars.push(all[randomInt(all.length)]!)
-  for (let i = chars.length - 1; i > 0; i--) {
-    const j = randomInt(i + 1)
-    ;[chars[i], chars[j]] = [chars[j]!, chars[i]!]
-  }
-  return chars.join('')
-}
+const options = computed<PasswordOptions>(() => ({
+  length: length.value,
+  upper: useUpper.value,
+  lower: useLower.value,
+  digits: useDigits.value,
+  special: useSpecial.value,
+  exclude: exclude.value,
+}))
+const alphabet = computed(() => passwordAlphabet(options.value))
+const entropy = computed(() => entropyBits(options.value))
 
 function refresh() {
-  if (!alphabet.value.length) {
-    output.value = ''
-    return
-  }
-  output.value = Array.from({ length: count.value }, onePassword).join('\n')
+  output.value = generatePasswords(options.value, count.value).join('\n')
 }
 watch([length, count, useUpper, useLower, useDigits, useSpecial, exclude], refresh, { immediate: true })
 </script>
@@ -115,7 +74,7 @@ watch([length, count, useUpper, useLower, useDigits, useSpecial, exclude], refre
         <IconButton size="sm" :title="t('common.refresh')" @click="refresh"><RefreshCw class="h-4 w-4" /></IconButton>
       </template>
       <template #footer>
-        <span>{{ tt('strength') }}: {{ entropyBits }} bits</span>
+        <span>{{ tt('strength') }}: {{ entropy }} bits</span>
       </template>
     </CodeEditor>
   </div>

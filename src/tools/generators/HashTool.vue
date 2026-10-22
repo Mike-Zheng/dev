@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { md5, sha1, sha256, sha384, sha512, createMD5, createSHA1, createSHA256, createSHA384, createSHA512, createHMAC, crc32 } from 'hash-wasm'
-import type { IHasher } from 'hash-wasm/dist/lib/WASMInterface'
 import { CaseUpper, KeyRound, Copy, CircleCheck, CircleX } from 'lucide-vue-next'
 import ConfigSection from '@/components/ui/ConfigSection.vue'
 import SettingCard from '@/components/ui/SettingCard.vue'
@@ -13,6 +11,7 @@ import IconButton from '@/components/ui/IconButton.vue'
 import { useI18n } from '@/i18n'
 import { useClipboard } from '@/composables/useClipboard'
 import { formatBytes } from '@/composables/useFiles'
+import { HASH_ALGOS, emptyHashes, hashBlob, hashText, matchesAnyHash, type HashResult } from './hash'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.hash.${k}`)
@@ -26,64 +25,17 @@ const verify = ref('')
 const fileInfo = ref<{ name: string; size: number } | null>(null)
 const computing = ref(false)
 
-const ALGOS = ['MD5', 'SHA1', 'SHA256', 'SHA384', 'SHA512', 'CRC32'] as const
-type Algo = (typeof ALGOS)[number]
-const hashes = ref<Record<Algo, string>>({ MD5: '', SHA1: '', SHA256: '', SHA384: '', SHA512: '', CRC32: '' })
+const hashes = ref<HashResult>(emptyHashes())
 
 let seq = 0
 let currentFile: File | null = null
-
-const creators: Record<Exclude<Algo, 'CRC32'>, () => Promise<IHasher>> = {
-  MD5: createMD5,
-  SHA1: createSHA1,
-  SHA256: createSHA256,
-  SHA384: createSHA384,
-  SHA512: createSHA512,
-}
-
-async function hashText(text: string) {
-  const key = secret.value
-  const out: Record<Algo, string> = { MD5: '', SHA1: '', SHA256: '', SHA384: '', SHA512: '', CRC32: '' }
-  if (hmac.value) {
-    for (const a of ['MD5', 'SHA1', 'SHA256', 'SHA384', 'SHA512'] as const) {
-      const h = await createHMAC(creators[a](), key)
-      h.init()
-      h.update(text)
-      out[a] = h.digest()
-    }
-  } else {
-    const [a, b, c, d, e] = await Promise.all([md5(text), sha1(text), sha256(text), sha384(text), sha512(text)])
-    out.MD5 = a
-    out.SHA1 = b
-    out.SHA256 = c
-    out.SHA384 = d
-    out.SHA512 = e
-  }
-  out.CRC32 = await crc32(text)
-  return out
-}
-
-async function hashFile(file: File) {
-  const key = secret.value
-  const names = ['MD5', 'SHA1', 'SHA256', 'SHA384', 'SHA512'] as const
-  const hashers = await Promise.all(names.map((a) => (hmac.value ? createHMAC(creators[a](), key) : creators[a]())))
-  hashers.forEach((h) => h.init())
-  const chunk = 4 * 1024 * 1024
-  for (let off = 0; off < file.size; off += chunk) {
-    const buf = new Uint8Array(await file.slice(off, off + chunk).arrayBuffer())
-    hashers.forEach((h) => h.update(buf))
-  }
-  const out: Record<Algo, string> = { MD5: '', SHA1: '', SHA256: '', SHA384: '', SHA512: '', CRC32: '' }
-  names.forEach((a, i) => (out[a] = hashers[i]!.digest()))
-  out.CRC32 = await crc32(new Uint8Array(await file.arrayBuffer()))
-  return out
-}
 
 async function recompute() {
   const my = ++seq
   computing.value = true
   try {
-    const out = currentFile ? await hashFile(currentFile) : await hashText(input.value)
+    const key = hmac.value ? secret.value : null
+    const out = currentFile ? await hashBlob(currentFile, key) : await hashText(input.value, key)
     if (my === seq) hashes.value = out
   } finally {
     if (my === seq) computing.value = false
@@ -108,7 +60,7 @@ async function onFiles(files: File[]) {
 }
 
 const rows = computed(() =>
-  ALGOS.map((a) => {
+  HASH_ALGOS.map((a) => {
     const v = uppercase.value ? hashes.value[a].toUpperCase() : hashes.value[a]
     return { algo: a, value: v }
   }),
@@ -117,9 +69,8 @@ const rows = computed(() =>
 const hasInput = computed(() => !!input.value || !!currentFile)
 
 const verifyState = computed<'none' | 'match' | 'mismatch'>(() => {
-  const v = verify.value.trim().toLowerCase()
-  if (!v || !hasInput.value) return 'none'
-  return ALGOS.some((a) => hashes.value[a].toLowerCase() === v) ? 'match' : 'mismatch'
+  if (!verify.value.trim() || !hasInput.value) return 'none'
+  return matchesAnyHash(hashes.value, verify.value) ? 'match' : 'mismatch'
 })
 </script>
 
