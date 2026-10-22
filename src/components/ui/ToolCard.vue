@@ -13,10 +13,10 @@ const fav = () => isFavorite(props.tool.id)
 <template>
   <RouterLink
     :to="{ name: 'tool', params: { id: tool.id } }"
-    class="group relative flex flex-col gap-3 rounded-card border border-line bg-surface p-4 transition-all hover:border-accent/60 hover:shadow-[0_0_0_1px_var(--c-accent),0_8px_30px_-12px_var(--c-glow)] focus-ring"
+    class="group relative flex flex-col gap-3 rounded-card border border-line bg-surface p-4 transition-all hover:border-line-strong hover:shadow-sm focus-ring"
   >
     <div class="flex items-start justify-between">
-      <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-accent-soft text-accent ring-1 ring-inset ring-accent/20">
+      <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-accent-soft text-accent">
         <component :is="tool.icon" class="h-5.5 w-5.5" />
       </div>
       <button

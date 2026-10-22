@@ -12,7 +12,7 @@ const icons = { info: Info, success: CircleCheck, error: CircleX }
       <div
         v-for="tst in toasts"
         :key="tst.id"
-        class="pointer-events-auto flex items-center gap-2 rounded-lg border border-line bg-surface px-3.5 py-2 text-sm shadow-xl shadow-black/20"
+        class="pointer-events-auto flex items-center gap-2 rounded-lg border border-line bg-surface px-3.5 py-2 text-sm shadow-lg"
       >
         <component
           :is="icons[tst.kind]"

@@ -26,7 +26,7 @@ function readTheme(): ThemeMode {
   } catch {
     /* ignore */
   }
-  return 'dark'
+  return 'system'
 }
 
 const theme = ref<ThemeMode>(readTheme())

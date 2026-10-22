@@ -21,9 +21,8 @@ const recentTools = computed(() =>
 </script>
 
 <template>
-  <div class="relative">
-    <div class="tech-grid pointer-events-none absolute inset-x-0 top-0 h-72" />
-    <div class="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-10">
+  <div>
+    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-10">
       <!-- Hero -->
       <header class="space-y-3">
         <div class="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-2.5 py-1 text-[11px] font-medium text-fg-muted">
@@ -32,7 +31,7 @@ const recentTools = computed(() =>
         </div>
         <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-fg">
           {{ t('app.welcome') }}
-          <span class="bg-gradient-to-r from-accent to-accent-2 bg-clip-text text-transparent">DevToys Web</span>
+          <span class="text-accent">DevToys Web</span>
         </h1>
         <p class="max-w-2xl text-sm sm:text-base text-fg-muted">
           {{ t('app.tagline') }} {{ t('app.toolCount', { count: tools.length }) }}.

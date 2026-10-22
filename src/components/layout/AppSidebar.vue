@@ -140,7 +140,7 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
       </div>
       <div
         v-if="showResults"
-        class="absolute left-3 right-3 top-full z-30 mt-1 overflow-hidden rounded-lg border border-line bg-surface shadow-xl shadow-black/30"
+        class="absolute left-3 right-3 top-full z-30 mt-1 overflow-hidden rounded-lg border border-line bg-surface shadow-lg"
       >
         <template v-if="results.length">
           <button
