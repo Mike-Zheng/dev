@@ -83,6 +83,16 @@ describe('convertAdvanced', () => {
     expect(convertAdvanced('+-+', 2, 10, '-+', DEFAULT_DICT).value).toBe('5')
   })
 
+  it('folds input case to match a single-case custom dictionary', () => {
+    expect(convertAdvanced('ff', 16, 10, '0123456789abcdef', DEFAULT_DICT).value).toBe('255')
+    expect(convertAdvanced('FF', 16, 10, '0123456789abcdef', DEFAULT_DICT).value).toBe('255')
+  })
+
+  it('rejects a lone minus sign', () => {
+    expect(convertAdvanced('-', 10, 16, DEFAULT_DICT, DEFAULT_DICT).error).toBe('invalid')
+    expect(convertSimple('-', 10, true)).toEqual({ rows: [], error: 'invalid' })
+  })
+
   it('caps the bases at the dictionary length', () => {
     const r = convertAdvanced('10', 16, 64, '01', '01234567')
     expect(r).toEqual({ value: '2', error: '', inputBase: 2 })

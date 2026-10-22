@@ -10,9 +10,12 @@ export function parseBig(text: string, base: number, dict: string): bigint | nul
   if (s.startsWith('-')) {
     neg = true
     s = s.slice(1)
+    if (!s) return null
   }
-  if (base <= 36) s = s.toUpperCase()
   const digits = dict.slice(0, base)
+  // Case-insensitive only when the digit set uses a single letter case.
+  if (digits === digits.toUpperCase()) s = s.toUpperCase()
+  else if (digits === digits.toLowerCase()) s = s.toLowerCase()
   let v = 0n
   const B = BigInt(base)
   for (const ch of s) {
