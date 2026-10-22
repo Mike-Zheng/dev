@@ -9,6 +9,7 @@ import CodeEditor from '@/components/ui/CodeEditor.vue'
 import InfoBar from '@/components/ui/InfoBar.vue'
 import { useI18n } from '@/i18n'
 import { useIndentOptions, type Indent } from '@/utils/indent'
+import { formatJson } from './jsonFormatter'
 
 const { t } = useI18n()
 const tt = (k: string) => t(`tools.json-formatter.${k}`)
@@ -18,29 +19,9 @@ const indentOptions = useIndentOptions(t)
 const sort = ref(false)
 const input = ref('')
 
-function sortKeys(v: unknown): unknown {
-  if (Array.isArray(v)) return v.map(sortKeys)
-  if (v && typeof v === 'object') {
-    const out: Record<string, unknown> = {}
-    for (const k of Object.keys(v as Record<string, unknown>).sort((a, b) => a.localeCompare(b))) {
-      out[k] = sortKeys((v as Record<string, unknown>)[k])
-    }
-    return out
-  }
-  return v
-}
-
 const result = computed<{ output: string; error: string }>(() => {
-  const src = input.value
-  if (!src.trim()) return { output: '', error: '' }
-  try {
-    let obj: unknown = JSON.parse(src)
-    if (sort.value) obj = sortKeys(obj)
-    const space = indent.value === 'two' ? 2 : indent.value === 'four' ? 4 : indent.value === 'tab' ? '\t' : undefined
-    return { output: JSON.stringify(obj, null, space), error: '' }
-  } catch (e) {
-    return { output: '', error: `${tt('invalid')}: ${(e as Error).message}` }
-  }
+  const r = formatJson(input.value, indent.value, sort.value)
+  return r.error ? { output: '', error: `${tt('invalid')}: ${r.error}` } : r
 })
 </script>
 
