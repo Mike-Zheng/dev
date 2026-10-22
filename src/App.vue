@@ -21,7 +21,7 @@ watch(
 </script>
 
 <template>
-  <div class="flex h-full overflow-hidden">
+  <div class="flex h-full overflow-hidden bg-bg">
     <!-- Desktop sidebar -->
     <div class="hidden lg:block h-full shrink-0">
       <AppSidebar :mobile-open="false" />
@@ -39,7 +39,7 @@ watch(
 
     <!-- Main -->
     <div class="flex min-w-0 flex-1 flex-col h-full">
-      <header class="flex h-14 shrink-0 items-center gap-2 border-b border-line bg-bg/80 px-3 backdrop-blur lg:hidden">
+      <header class="flex h-14 shrink-0 items-center gap-2 bg-bg px-3 lg:hidden">
         <button
           type="button"
           class="inline-flex h-9 w-9 items-center justify-center rounded-md text-fg-muted hover:bg-surface-2 hover:text-fg focus-ring"
@@ -64,7 +64,7 @@ watch(
         </button>
       </header>
 
-      <main class="relative flex-1 min-h-0 overflow-y-auto">
+      <main class="relative flex-1 min-h-0 overflow-y-auto bg-layer border-t border-line lg:mt-2 lg:border-l lg:rounded-tl-lg">
         <RouterView v-slot="{ Component }">
           <Transition name="fade" mode="out-in">
             <component :is="Component" :key="route.fullPath" />

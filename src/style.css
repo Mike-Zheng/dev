@@ -3,65 +3,80 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ---------- Design tokens (clean, neutral palette) ---------- */
+/* ---------- Design tokens (bright & airy, light aqua-blue tint, sky-blue accent) ----------
+   Translucent fills are kept as rgba so they layer correctly on any surface. */
 :root {
-  --c-bg: #fafafa;
-  --c-bg-soft: #f4f4f5;
-  --c-surface: #ffffff;
-  --c-surface-2: #f4f4f5;
-  --c-surface-3: #e4e4e7;
-  --c-line: #e4e4e7;
-  --c-line-strong: #d4d4d8;
-  --c-fg: #18181b;
-  --c-fg-muted: #71717a;
-  --c-fg-faint: #a1a1aa;
-  --c-accent: #2563eb;
+  --c-bg: #f5fafb;                          /* window / sidebar — airy aqua white */
+  --c-bg-soft: #f5fafb;
+  --c-layer: #fbfdfd;                       /* content area */
+  --c-surface: #ffffff;                     /* cards */
+  --c-surface-2: rgba(10, 140, 170, 0.045); /* hover / selected — faint aqua wash */
+  --c-surface-3: rgba(10, 140, 170, 0.075);
+  --c-control: #ffffff;
+  --c-control-hover: #f7fbfc;
+  --c-control-active: #ffffff;
+  --c-line: rgba(15, 60, 75, 0.08);
+  --c-line-strong: rgba(15, 60, 75, 0.16);
+  --c-fg: #1a2a30;
+  --c-fg-muted: #52646a;
+  --c-fg-faint: #85969b;
+  --c-accent: #0a7bbd;                      /* sky blue leaning aqua (≥4.5:1 on white) */
   --c-accent-fg: #ffffff;
-  --c-accent-soft: #eff6ff;
-  --c-accent-2: #2563eb;
-  --c-success: #16a34a;
-  --c-success-soft: #f0fdf4;
-  --c-warning: #d97706;
-  --c-warning-soft: #fffbeb;
-  --c-danger: #dc2626;
-  --c-danger-soft: #fef2f2;
-  --c-info: #2563eb;
-  --c-info-soft: #eff6ff;
+  --c-accent-soft: #e8f5fa;                 /* light aqua */
+  --c-accent-2: #08649a;
+  --c-focus-inner: #ffffff;
+  --c-success: #15803d;
+  --c-success-soft: #e8f8ed;
+  --c-warning: #a15c00;
+  --c-warning-soft: #fff6dc;
+  --c-danger: #c42b1c;
+  --c-danger-soft: #fde8e8;
+  --c-info: #0a7bbd;
+  --c-info-soft: #f1f9fb;
   color-scheme: light;
 }
 
 .dark {
-  --c-bg: #09090b;
-  --c-bg-soft: #0f0f11;
-  --c-surface: #131316;
-  --c-surface-2: #1b1b1f;
-  --c-surface-3: #26262b;
-  --c-line: #232328;
-  --c-line-strong: #333339;
-  --c-fg: #f4f4f5;
-  --c-fg-muted: #a1a1aa;
-  --c-fg-faint: #71717a;
-  --c-accent: #60a5fa;
-  --c-accent-fg: #0b1220;
-  --c-accent-soft: rgba(96, 165, 250, 0.12);
-  --c-accent-2: #60a5fa;
-  --c-success: #4ade80;
-  --c-success-soft: rgba(74, 222, 128, 0.12);
-  --c-warning: #fbbf24;
-  --c-warning-soft: rgba(251, 191, 36, 0.12);
-  --c-danger: #f87171;
-  --c-danger-soft: rgba(248, 113, 113, 0.12);
-  --c-info: #60a5fa;
-  --c-info-soft: rgba(96, 165, 250, 0.12);
+  --c-bg: #141820;
+  --c-bg-soft: #141820;
+  --c-layer: #1a1f28;
+  --c-surface: #212733;
+  --c-surface-2: rgba(130, 170, 255, 0.07);
+  --c-surface-3: rgba(130, 170, 255, 0.11);
+  --c-control: rgba(255, 255, 255, 0.05);
+  --c-control-hover: rgba(255, 255, 255, 0.08);
+  --c-control-active: #13171e;
+  --c-line: rgba(200, 215, 240, 0.08);
+  --c-line-strong: rgba(200, 215, 240, 0.14);
+  --c-fg: #ecf1f8;
+  --c-fg-muted: #a8b3c4;
+  --c-fg-faint: #748094;
+  --c-accent: #7cb4ff;
+  --c-accent-fg: #08203f;
+  --c-accent-soft: rgba(124, 180, 255, 0.14);
+  --c-accent-2: #a9cdff;
+  --c-focus-inner: #000000;
+  --c-success: #6dd58c;
+  --c-success-soft: #1d3324;
+  --c-warning: #f5c84b;
+  --c-warning-soft: #3a3019;
+  --c-danger: #ff9a9a;
+  --c-danger-soft: #402626;
+  --c-info: #7cb4ff;
+  --c-info-soft: rgba(124, 180, 255, 0.06);
   color-scheme: dark;
 }
 
 @theme inline {
   --color-bg: var(--c-bg);
   --color-bg-soft: var(--c-bg-soft);
+  --color-layer: var(--c-layer);
   --color-surface: var(--c-surface);
   --color-surface-2: var(--c-surface-2);
   --color-surface-3: var(--c-surface-3);
+  --color-control: var(--c-control);
+  --color-control-hover: var(--c-control-hover);
+  --color-control-active: var(--c-control-active);
   --color-line: var(--c-line);
   --color-line-strong: var(--c-line-strong);
   --color-fg: var(--c-fg);
@@ -80,7 +95,7 @@
   --color-info: var(--c-info);
   --color-info-soft: var(--c-info-soft);
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --font-sans: "Noto Sans Variable", "Noto Sans TC Variable", "Noto Sans", "Noto Sans TC", ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
   --radius-card: 0.625rem;
@@ -93,27 +108,27 @@ html, body, #app {
 
 body {
   @apply bg-bg text-fg font-sans antialiased;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
 ::selection {
-  background: var(--c-accent-soft);
+  background: var(--c-accent);
+  color: var(--c-accent-fg);
 }
 
 /* Scrollbars */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--c-line-strong) transparent;
+  scrollbar-color: var(--c-fg-faint) transparent;
 }
 *::-webkit-scrollbar { width: 10px; height: 10px; }
-*::-webkit-scrollbar-thumb { background: var(--c-line-strong); border-radius: 999px; border: 3px solid transparent; background-clip: padding-box; }
+*::-webkit-scrollbar-thumb { background: var(--c-fg-faint); border-radius: 999px; border: 3px solid transparent; background-clip: padding-box; }
 *::-webkit-scrollbar-track { background: transparent; }
 
-/* Focus ring (utility so it can be used inside @apply) */
+/* Focus ring — WinUI focus visual: thin inner stroke + 2px outer stroke in the primary text colour */
 @utility focus-ring {
   outline: none;
   &:focus-visible {
-    box-shadow: 0 0 0 2px var(--c-bg), 0 0 0 4px color-mix(in srgb, var(--c-accent) 60%, transparent);
+    box-shadow: 0 0 0 1px var(--c-focus-inner), 0 0 0 3px var(--c-fg);
   }
 }
 

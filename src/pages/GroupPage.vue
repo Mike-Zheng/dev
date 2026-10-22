@@ -22,7 +22,7 @@ const title = computed(() => (isFavorites.value ? t('app.favorites') : group.val
 <template>
   <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-6">
     <header class="flex items-center gap-3">
-      <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-accent-soft text-accent">
+      <div class="flex h-11 w-11 items-center justify-center rounded-md bg-surface-2 text-fg">
         <Star v-if="isFavorites" class="h-5.5 w-5.5" />
         <component :is="group.icon" v-else-if="group" class="h-5.5 w-5.5" />
       </div>

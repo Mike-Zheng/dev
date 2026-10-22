@@ -23,7 +23,7 @@ function onChange(e: Event) {
     <select
       :value="model"
       :disabled="disabled"
-      class="appearance-none rounded-lg border border-line bg-surface-2 text-fg pr-8 focus-ring hover:border-line-strong disabled:opacity-50 cursor-pointer"
+      class="appearance-none rounded-md border border-line border-b-line-strong bg-control text-fg pr-8 focus-ring hover:bg-control-hover disabled:opacity-50 cursor-pointer"
       :class="size === 'sm' ? 'h-8 pl-2.5 text-xs' : 'h-9 pl-3 text-sm'"
       @change="onChange"
     >

@@ -16,7 +16,7 @@ withDefaults(
 <template>
   <div class="rounded-card border border-line bg-surface">
     <div class="flex gap-3 px-4 py-3" :class="stacked ? 'flex-col sm:flex-row sm:items-center' : 'items-center'">
-      <div v-if="icon" class="hidden sm:flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-surface-2 text-accent">
+      <div v-if="icon" class="hidden sm:flex h-9 w-9 shrink-0 items-center justify-center text-fg">
         <component :is="icon" class="h-[18px] w-[18px]" />
       </div>
       <div class="min-w-0 flex-1">

@@ -93,7 +93,7 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
 
 <template>
   <aside
-    class="flex h-full flex-col border-r border-line bg-bg-soft transition-[width] duration-200"
+    class="flex h-full flex-col bg-bg-soft transition-[width] duration-200"
     :class="collapsed ? 'w-[68px]' : 'w-[280px]'"
   >
     <!-- Brand -->
@@ -131,7 +131,7 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
           v-model="query"
           type="search"
           :placeholder="t('app.search')"
-          class="h-9 w-full rounded-lg border border-line bg-surface pl-8 pr-3 text-sm text-fg placeholder:text-fg-faint focus-ring hover:border-line-strong"
+          class="h-9 w-full rounded-md border border-line border-b-line-strong bg-control pl-8 pr-3 text-sm text-fg placeholder:text-fg-faint outline-none hover:bg-control-hover focus:bg-control-active focus:border-b-accent focus:shadow-[inset_0_-1px_0_var(--c-accent)]"
           @focus="searchFocused = true"
           @blur="searchFocused = false"
           @keydown.enter.prevent="onSearchEnter"
@@ -151,7 +151,7 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
             @mousedown.prevent
             @click="go({ name: 'tool', params: { id: tool.id } })"
           >
-            <component :is="tool.icon" class="h-4 w-4 shrink-0 text-accent" />
+            <component :is="tool.icon" class="h-4 w-4 shrink-0 text-fg-muted" />
             <span class="truncate text-fg">{{ toolTitle(tool) }}</span>
             <span class="ml-auto text-[10px] uppercase tracking-wider text-fg-faint">{{ t(`groups.${tool.group}`) }}</span>
           </button>
@@ -162,7 +162,7 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
     <div v-else class="px-3 pb-2 shrink-0">
       <button
         type="button"
-        class="flex h-9 w-full items-center justify-center rounded-lg border border-line bg-surface text-fg-muted hover:text-fg"
+        class="flex h-9 w-full items-center justify-center rounded-md border border-line border-b-line-strong bg-control text-fg-muted hover:bg-control-hover hover:text-fg"
         :title="t('app.search')"
         @click="sidebarCollapsed = false"
       >
@@ -264,10 +264,15 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
 @reference "@/style.css";
 
 .nav-item {
-  @apply flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-fg-muted transition-colors hover:bg-surface-2 hover:text-fg focus-ring;
+  @apply relative flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm text-fg transition-colors hover:bg-surface-2 focus-ring;
 }
+/* WinUI NavigationViewItem: subtle fill + 3px accent pill on the left */
 .nav-item-active {
-  @apply bg-accent-soft text-accent hover:bg-accent-soft hover:text-accent;
+  @apply bg-surface-2;
+}
+.nav-item-active::before {
+  content: '';
+  @apply absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-full bg-accent;
 }
 .nav-icon {
   @apply h-[18px] w-[18px] shrink-0;

@@ -22,7 +22,7 @@ function bump(d: number) {
 
 <template>
   <span
-    class="inline-flex items-stretch rounded-lg border border-line bg-surface-2 overflow-hidden focus-within:ring-2 focus-within:ring-accent/60"
+    class="inline-flex items-stretch rounded-md border border-line border-b-line-strong bg-control overflow-hidden hover:bg-control-hover focus-within:bg-control-active focus-within:border-b-accent focus-within:shadow-[inset_0_-1px_0_var(--c-accent)]"
     :class="size === 'sm' ? 'h-8' : 'h-9'"
   >
     <button type="button" class="px-2 text-fg-muted hover:text-fg hover:bg-surface-3 disabled:opacity-40" :disabled="disabled || model <= min" @click="bump(-1)">

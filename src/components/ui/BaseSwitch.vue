@@ -15,7 +15,7 @@ withDefaults(defineProps<{ onLabel?: string; offLabel?: string; disabled?: boole
     <span class="text-sm text-fg-muted min-w-[2ch] text-right" v-if="onLabel || offLabel">{{ model ? onLabel : offLabel }}</span>
     <span
       class="relative inline-block h-5 w-9 shrink-0 rounded-full border transition-colors"
-      :class="model ? 'bg-accent border-accent' : 'bg-surface-3 border-line-strong group-hover:border-fg-faint'"
+      :class="model ? 'bg-accent border-accent group-hover:opacity-90' : 'bg-control border-fg-muted group-hover:bg-control-hover'"
     >
       <span
         class="absolute top-1/2 -translate-y-1/2 h-3.5 w-3.5 rounded-full transition-all"

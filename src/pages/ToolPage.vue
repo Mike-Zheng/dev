@@ -33,7 +33,7 @@ function openNewTab() {
   <div class="mx-auto flex min-h-full max-w-7xl flex-col px-4 py-5 sm:px-6 lg:px-8">
     <template v-if="tool">
       <header class="mb-5 flex items-start gap-3">
-        <div class="hidden sm:flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent">
+        <div class="hidden sm:flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-surface-2 text-fg">
           <component :is="tool.icon" class="h-5.5 w-5.5" />
         </div>
         <div class="min-w-0 flex-1">
