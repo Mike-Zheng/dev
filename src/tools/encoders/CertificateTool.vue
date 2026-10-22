@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import 'reflect-metadata'
 import * as x509 from '@peculiar/x509'
 import CodeEditor from '@/components/ui/CodeEditor.vue'
 import InfoBar from '@/components/ui/InfoBar.vue'
