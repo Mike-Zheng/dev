@@ -4,3 +4,4 @@
  */
 import './converters'
 import './encoders'
+import './formatters'
