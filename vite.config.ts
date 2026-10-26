@@ -21,6 +21,14 @@ export default defineConfig({
   build: {
     chunkSizeWarningLimit: 1500,
   },
+  // The image compressor worker lazy-loads its codecs, which needs ES-module workers
+  worker: {
+    format: 'es',
+  },
+  // Emscripten / wasm-pack glue locates its .wasm via import.meta.url, which pre-bundling breaks
+  optimizeDeps: {
+    exclude: ['@jsquash/jpeg', '@jsquash/webp', 'libimagequant-wasm'],
+  },
   test: {
     include: ['src/**/*.test.ts'],
     environment: 'node',
