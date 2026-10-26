@@ -25,7 +25,7 @@
 | 圖示 | lucide-vue-next |
 | 型別 | TypeScript（`vue-tsc` 檢查） |
 
-工具實作使用的瀏覽器端函式庫（皆為純前端）：`js-yaml`、`cron-parser`、`cronstrue`、`sql-formatter`、`xml-formatter`、`marked` + `dompurify`、`diff`、`qrcode`、`jsqr`、`pako`、`hash-wasm`、`uuid`、`jsonpath-plus`、`jose`、`@peculiar/x509`、`figlet`。
+工具實作使用的瀏覽器端函式庫（皆為純前端）：`js-yaml`、`cron-parser`、`cronstrue`、`sql-formatter`、`xml-formatter`、`marked` + `dompurify`、`diff`、`qrcode`、`jsqr`、`pako`、`hash-wasm`、`uuid`、`jsonpath-plus`、`jose`、`@peculiar/x509`、`figlet`、`@xdadda/mini-gl`（WebGL2 相片濾鏡）。
 
 ## 目錄結構
 
@@ -46,7 +46,7 @@ src/
     encoders/             Base64Text、Base64Image、Certificate、GZip、Html、Jwt、QrCode、Url
     formatters/           Json、Sql、Xml
     generators/           AsciiArt、Hash、LoremIpsum、Password、Uuid
-    graphic/              ColorBlindness、ImageConverter、TriangleGradient、BoxShadow
+    graphic/              ColorBlindness、ImageConverter、TriangleGradient、BoxShadow、PhotoEditor
     testers/              JsonPath、RegEx、Xml
     text/                 Analyzer、Compare、EscapeUnescape、ListCompare、MarkdownPreview
   pages/                  HomePage、GroupPage、ToolPage、SettingsPage
