@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { Lightbulb, ShieldCheck } from 'lucide-vue-next'
+import { Lightbulb } from 'lucide-vue-next'
 import ToolCard from '@/components/ui/ToolCard.vue'
 import SectionTitle from '@/components/ui/SectionTitle.vue'
-import { groups, tools, toolsOfGroup, findTool } from '@/tools/registry'
+import { groups, toolsOfGroup, findTool } from '@/tools/registry'
 import { useI18n } from '@/i18n'
 import { useSettings } from '@/composables/useSettings'
 
@@ -23,21 +23,6 @@ const recentTools = computed(() =>
 <template>
   <div>
     <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-10">
-      <!-- Hero -->
-      <header class="space-y-3">
-        <div class="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-2.5 py-1 text-[11px] font-medium text-fg-muted">
-          <ShieldCheck class="h-3.5 w-3.5 text-success" />
-          {{ t('app.privacy') }}
-        </div>
-        <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-fg">
-          {{ t('app.welcome') }}
-          <span class="text-accent">DevToys Web</span>
-        </h1>
-        <p class="max-w-2xl text-sm sm:text-base text-fg-muted">
-          {{ t('app.tagline') }} {{ t('app.toolCount', { count: tools.length }) }}.
-        </p>
-      </header>
-
       <!-- Favorites -->
       <section v-if="favoriteTools.length" class="space-y-4">
         <SectionTitle :title="t('app.favorites')" />
