@@ -67,7 +67,7 @@ npm install        # 安裝依賴
 npm run dev        # 開發伺服器
 npm run build      # vue-tsc 型別檢查 + 生產打包
 npm test           # Vitest 單元測試（npm run test:watch 為監看模式）
-npm run preview    # 預覽 dist
+npm run preview    # 預覽 docs（GitHub Pages 由 main 分支的 /docs 提供）
 ```
 
 ## 慣例

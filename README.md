@@ -22,8 +22,8 @@
 ```bash
 npm install
 npm run dev       # http://localhost:5173
-npm run build     # 型別檢查 + 打包到 dist/
-npm run preview   # 預覽 dist/
+npm run build     # 型別檢查 + 打包到 docs/（GitHub Pages）
+npm run preview   # 預覽 docs/
 ```
 
 打包結果為純靜態檔案（hash 路由），可直接部署到任何靜態空間。

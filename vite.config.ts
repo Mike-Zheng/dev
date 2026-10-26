@@ -19,6 +19,8 @@ export default defineConfig({
     },
   },
   build: {
+    // GitHub Pages serves the site from main:/docs
+    outDir: 'docs',
     chunkSizeWarningLimit: 1500,
   },
   // The image compressor worker lazy-loads its codecs, which needs ES-module workers
