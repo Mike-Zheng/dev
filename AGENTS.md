@@ -46,7 +46,7 @@ src/
     encoders/             Base64Text、Base64Image、Certificate、GZip、Html、Jwt、QrCode、Url
     formatters/           Json、Sql、Xml
     generators/           AsciiArt、Hash、LoremIpsum、Password、Uuid
-    graphic/              ColorBlindness、ImageConverter、ImageCompressor、TriangleGradient、BoxShadow、PhotoEditor
+    graphic/              ColorBlindness、ImageConverter、ImageCompressor、TriangleGradient、BoxShadow、PhotoEditor、PhotoCollage / MerinoVector（外連工具，僅註冊 `href`，無元件）
     testers/              JsonPath、RegEx、Xml
     text/                 Analyzer、Compare、EscapeUnescape、ListCompare、MarkdownPreview
   pages/                  HomePage、GroupPage、ToolPage、SettingsPage
@@ -56,7 +56,7 @@ src/
 
 1. 在 `src/tools/<group>/` 新增 `XxxTool.vue`。版面慣例：上方「Configuration」設定卡片區（`SettingCard`），下方輸入 / 輸出編輯器（`CodeEditor`），雙欄在 `lg` 以上並排、以下堆疊。
 2. 在 `src/i18n/locales/en.ts` 與 `zh-TW.ts` 的 `tools.<id>` 加入 `title`、`short`、`description`、`keywords` 與工具內字串。
-3. 在 `src/tools/registry.ts` 註冊：`id`、`group`、`icon`、`component: () => import(...)`。
+3. 在 `src/tools/registry.ts` 註冊：`id`、`group`、`icon`、`component: () => import(...)`。外連工具（開啟獨立網站）改給 `href` 而不給 `component`，所有連結渲染處須經 `ToolLink` / `ExternalMark`。
 4. 運算邏輯放在同資料夾的純函式模組 `xxx.ts`（不依賴 Vue / i18n，錯誤以代碼回傳，由 `.vue` 對應成 `tt(...)` 訊息），並撰寫同層的 `xxx.test.ts`（Vitest；需要 DOM 時在檔案首行加 `// @vitest-environment jsdom`）。
 5. 執行 `npm test` 與 `npm run build` 確認測試、型別與打包無誤。
 

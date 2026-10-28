@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent, watch } from 'vue'
 import { ExternalLink, Moon, Star, Sun } from 'lucide-vue-next'
-import { findTool } from '@/tools/registry'
+import { findTool, isExternalTool } from '@/tools/registry'
 import { useI18n } from '@/i18n'
 import { useSettings } from '@/composables/useSettings'
 
@@ -12,7 +12,11 @@ const { isFavorite, toggleFavorite, pushRecent, isDark, toggleTheme } = useSetti
 const tool = computed(() => findTool(props.id))
 const component = computed(() => {
   const def = tool.value
-  return def ? defineAsyncComponent(def.component) : null
+  return def && !isExternalTool(def) ? defineAsyncComponent(def.component) : null
+})
+const externalHref = computed(() => {
+  const def = tool.value
+  return def && isExternalTool(def) ? def.href : null
 })
 
 watch(
@@ -56,6 +60,7 @@ function openNewTab() {
           </button>
           <button
             type="button"
+            v-if="!externalHref"
             class="hidden sm:inline-flex h-9 w-9 items-center justify-center rounded-lg text-fg-muted hover:bg-surface-2 hover:text-fg focus-ring"
             :title="t('app.openInNewTab')"
             @click="openNewTab"
@@ -74,7 +79,20 @@ function openNewTab() {
         </div>
       </header>
 
-      <div class="flex-1 min-h-0">
+      <div v-if="externalHref" class="rounded-card border border-line bg-surface p-6 space-y-4">
+        <p class="text-sm text-fg-muted">{{ t('app.externalNote') }}</p>
+        <a
+          :href="externalHref"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex h-9 items-center gap-2 rounded-lg bg-accent px-4 text-sm font-medium text-accent-fg hover:opacity-90 focus-ring"
+        >
+          <ExternalLink class="h-4 w-4" />
+          {{ t('app.openExternal') }}
+        </a>
+      </div>
+
+      <div v-else class="flex-1 min-h-0">
         <Suspense>
           <component :is="component" v-if="component" />
           <template #fallback>

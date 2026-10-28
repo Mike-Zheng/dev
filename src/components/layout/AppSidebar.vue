@@ -12,7 +12,9 @@ import {
   Star,
   X,
 } from 'lucide-vue-next'
-import { groups, tools, toolsOfGroup, type ToolDefinition } from '@/tools/registry'
+import ToolLink from '@/components/ui/ToolLink.vue'
+import ExternalMark from '@/components/ui/ExternalMark.vue'
+import { groups, isExternalTool, tools, toolsOfGroup, type ToolDefinition } from '@/tools/registry'
 import { useI18n } from '@/i18n'
 import { useSettings } from '@/composables/useSettings'
 
@@ -74,9 +76,20 @@ function go(to: Parameters<typeof router.push>[0]) {
   emit('close')
 }
 
+/** Open a tool: internal tools navigate, external ones open in a new tab. */
+function openTool(tool: ToolDefinition) {
+  if (isExternalTool(tool)) {
+    window.open(tool.href, '_blank', 'noopener,noreferrer')
+    query.value = ''
+    emit('close')
+  } else {
+    go({ name: 'tool', params: { id: tool.id } })
+  }
+}
+
 function onSearchEnter() {
   const first = results.value[0]
-  if (first) go({ name: 'tool', params: { id: first.id } })
+  if (first) openTool(first)
 }
 
 function toggleGroup(id: string) {
@@ -149,10 +162,11 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
             type="button"
             class="flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm hover:bg-surface-2"
             @mousedown.prevent
-            @click="go({ name: 'tool', params: { id: tool.id } })"
+            @click="openTool(tool)"
           >
             <component :is="tool.icon" class="h-4 w-4 shrink-0 text-fg-muted" />
             <span class="truncate text-fg">{{ toolTitle(tool) }}</span>
+            <ExternalMark :tool="tool" />
             <span class="ml-auto text-[10px] uppercase tracking-wider text-fg-faint">{{ t(`groups.${tool.group}`) }}</span>
           </button>
         </template>
@@ -219,17 +233,18 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
           </button>
         </div>
         <div v-if="!collapsed && expanded[g.id]" class="ml-4 mt-0.5 border-l border-line pl-2 space-y-0.5">
-          <RouterLink
+          <ToolLink
             v-for="tool in toolsOfGroup(g.id)"
             :key="tool.id"
-            :to="{ name: 'tool', params: { id: tool.id } }"
+            :tool="tool"
             class="nav-item py-1.5"
             :class="currentToolId === tool.id ? 'nav-item-active' : ''"
             @click="emit('close')"
           >
             <component :is="tool.icon" class="nav-icon h-4 w-4" />
             <span class="truncate">{{ t(`tools.${tool.id}.short`) }}</span>
-          </RouterLink>
+            <ExternalMark :tool="tool" />
+          </ToolLink>
         </div>
       </div>
     </nav>

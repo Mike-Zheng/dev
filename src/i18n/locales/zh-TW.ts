@@ -17,6 +17,8 @@ export const zhTW: DeepPartial<Messages> = {
     addFavorite: '加入最愛',
     removeFavorite: '從最愛中移除',
     openInNewTab: '在新分頁開啟',
+    openExternal: '開啟',
+    externalNote: '這是獨立的網頁應用程式，會在新分頁中開啟其專屬網站。',
     notFinding: '找不到您想要的東西？',
     notFindingHint: '所有工具皆在瀏覽器本機執行，貼上的內容不會離開這個頁面。',
     suggest: '提出建議',

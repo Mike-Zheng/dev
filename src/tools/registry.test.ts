@@ -2,7 +2,7 @@
 import { beforeAll, describe, expect, it, vi } from 'vitest'
 import { en } from '@/i18n/locales/en'
 import { zhTW } from '@/i18n/locales/zh-TW'
-import { findTool, groups, tools, toolsOfGroup } from './registry'
+import { findTool, groups, isExternalTool, tools, toolsOfGroup } from './registry'
 import '.'
 
 type Dict = { [key: string]: unknown }
@@ -42,8 +42,18 @@ describe('tool registry', () => {
     }))
   })
 
-  it.each(tools.map((t) => [t.id, t] as const))('lazy-loads the %s component', async (_, tool) => {
-    const mod = await tool.component()
+  it('registers Photo Collage and Merino Vector as external links', () => {
+    for (const id of ['photo-collage', 'merino-vector']) {
+      const tool = findTool(id)
+      expect(tool && isExternalTool(tool)).toBe(true)
+      expect(tool?.href).toMatch(/^https:\/\/mike-zheng\.github\.io\//)
+      expect(tool?.group).toBe('graphic')
+    }
+    expect(isExternalTool(findTool('json-yaml')!)).toBe(false)
+  })
+
+  it.each(tools.filter((t) => !isExternalTool(t)).map((t) => [t.id, t] as const))('lazy-loads the %s component', async (_, tool) => {
+    const mod = await tool.component!()
     expect(mod.default).toBeTruthy()
   }, 30_000)
 })

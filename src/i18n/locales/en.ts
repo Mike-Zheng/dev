@@ -13,6 +13,8 @@ export const en = {
     addFavorite: 'Add to favorites',
     removeFavorite: 'Remove from favorites',
     openInNewTab: 'Open in a new tab',
+    openExternal: 'Open',
+    externalNote: 'This is a standalone web app that opens on its own site in a new tab.',
     notFinding: "Not finding what you're looking for?",
     notFindingHint: 'Every tool runs locally in your browser. Nothing you paste ever leaves this page.',
     suggest: 'Suggest an idea',

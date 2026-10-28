@@ -17,13 +17,22 @@ export interface ToolGroup {
   icon: Component
 }
 
-export interface ToolDefinition {
+interface ToolBase {
   id: string
   group: ToolGroupId
   icon: Component
   /** Extra search keywords (English, from DevToys SearchKeywords) */
   keywords?: string[]
-  component: () => Promise<{ default: Component }>
+}
+
+export type InternalToolDefinition = ToolBase & { component: () => Promise<{ default: Component }>; href?: never }
+export type ExternalToolDefinition = ToolBase & { href: string; component?: never }
+
+/** A tool rendered inside this app, or an external link that opens `href` in a new tab. */
+export type ToolDefinition = InternalToolDefinition | ExternalToolDefinition
+
+export function isExternalTool(tool: ToolDefinition): tool is ExternalToolDefinition {
+  return typeof tool.href === 'string'
 }
 
 export const groups: ToolGroup[] = [

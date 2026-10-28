@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { Star } from 'lucide-vue-next'
 import type { ToolDefinition } from '@/tools/registry'
+import ToolLink from '@/components/ui/ToolLink.vue'
+import ExternalMark from '@/components/ui/ExternalMark.vue'
 import { useI18n } from '@/i18n'
 import { useSettings } from '@/composables/useSettings'
 
@@ -11,8 +13,8 @@ const fav = () => isFavorite(props.tool.id)
 </script>
 
 <template>
-  <RouterLink
-    :to="{ name: 'tool', params: { id: tool.id } }"
+  <ToolLink
+    :tool="tool"
     class="group relative flex flex-col gap-3 rounded-card border border-line bg-surface p-4 transition-colors hover:bg-control-hover focus-ring"
   >
     <div class="flex items-start justify-between">
@@ -30,9 +32,12 @@ const fav = () => isFavorite(props.tool.id)
       </button>
     </div>
     <div>
-      <div class="text-sm font-semibold text-fg leading-snug">{{ t(`tools.${tool.id}.title`) }}</div>
+      <div class="flex items-center gap-1.5 text-sm font-semibold text-fg leading-snug">
+        <span>{{ t(`tools.${tool.id}.title`) }}</span>
+        <ExternalMark :tool="tool" />
+      </div>
       <div class="mt-1 text-xs text-fg-muted leading-relaxed line-clamp-2">{{ t(`tools.${tool.id}.description`) }}</div>
     </div>
     <div class="mt-auto text-[11px] uppercase tracking-wider text-fg-faint">{{ t(`groups.${tool.group}`) }}</div>
-  </RouterLink>
+  </ToolLink>
 </template>

@@ -11,7 +11,7 @@
 | 編碼 / 解碼 | Base64 文字、Base64 圖片、憑證解碼（X.509）、GZip、HTML、JWT（解碼 / 驗證 / 簽署）、MD5（產生 / 驗證）、QR 碼（產生 / 讀取）、URL |
 | 格式化 | JSON、SQL（多種方言）、XML |
 | 產生器 | 雜湊值 / 檢查碼（MD5、SHA1/256/384/512、CRC32、HMAC、檔案）、Lorem Ipsum、密碼、UUID（v1 / v4 / v7）、ASCII 藝術字（335 種 FIGlet 字型） |
-| 圖形 | 色盲模擬、圖片轉檔（PNG / JPEG / WebP、縮放）、圖片壓縮（MozJPEG / libimagequant / libwebp / SVGO，九宮格品質對照、放大鏡同步比對、SSIM / PSNR 推薦、細化、差異檢視、批次 ZIP 下載）、三角漸層圖（低多邊形背景，PNG / SVG 匯出）、CSS 陰影產生器（平滑多層陰影、96 個範例，CSS / Tailwind 輸出）、相片編輯器（WebGL：裁切 / 旋轉 / 縮放、光線色彩、曲線、濾鏡、鏡頭模糊、前後對照、色階分佈圖） |
+| 圖形 | 色盲模擬、圖片轉檔（PNG / JPEG / WebP、縮放）、圖片壓縮（MozJPEG / libimagequant / libwebp / SVGO，九宮格品質對照、放大鏡同步比對、SSIM / PSNR 推薦、細化、差異檢視、批次 ZIP 下載）、三角漸層圖（低多邊形背景，PNG / SVG 匯出）、CSS 陰影產生器（平滑多層陰影、96 個範例，CSS / Tailwind 輸出）、相片編輯器（WebGL：裁切 / 旋轉 / 縮放、光線色彩、曲線、濾鏡、鏡頭模糊、前後對照、色階分佈圖）、相片拼貼與 Merino 向量繪圖（外連工具，於新分頁開啟獨立網站） |
 | 測試 | JSONPath、正規表達式、XML / XSD 驗證 |
 | 文字 | 文字分析與實用工具（統計、大小寫、排序）、文字比較（diff）、跳脫 / 取消跳脫、清單比較、刪除重複行、文字排序、Markdown 預覽 |
 

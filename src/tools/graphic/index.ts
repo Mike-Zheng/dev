@@ -1,4 +1,4 @@
-import { Camera, Eye, Images, Shrink, SquareStack, Triangle } from 'lucide-vue-next'
+import { Camera, Eye, Images, LayoutGrid, PenTool, Shrink, SquareStack, Triangle } from 'lucide-vue-next'
 import { defineTool } from '../registry'
 
 defineTool(
@@ -507,6 +507,43 @@ defineTool(
       gaussian: '高斯',
       focusSize: '對焦範圍',
       blurHint: '在相片上點選或拖曳以移動對焦點，對焦範圍外的區域會被模糊。',
+    },
+  },
+)
+
+// External tools: standalone web apps that open in a new tab (no in-app tool page).
+defineTool(
+  { id: 'photo-collage', group: 'graphic', icon: LayoutGrid, keywords: ['photo', 'collage', 'layout', 'grid', 'montage', 'background removal', 'export'], href: 'https://mike-zheng.github.io/photo-collage/' },
+  {
+    en: {
+      title: 'Photo Collage',
+      short: 'Photo Collage',
+      description: 'Arrange multiple photos into a collage in your browser — layouts, export and background removal',
+      keywords: 'photo collage layout grid montage export background removal',
+    },
+    'zh-TW': {
+      title: '相片拼貼',
+      short: '相片拼貼',
+      description: '在瀏覽器中排版多張相片成拼貼——提供版型、匯出與去背',
+      keywords: '相片 照片 拼貼 版型 排版 匯出 去背',
+    },
+  },
+)
+
+defineTool(
+  { id: 'merino-vector', group: 'graphic', icon: PenTool, keywords: ['vector', 'svg', 'trace', 'vectorize', 'bitmap', 'path', 'bezier', 'illustrator'], href: 'https://mike-zheng.github.io/merino-vector/' },
+  {
+    en: {
+      title: 'Merino Vector',
+      short: 'Merino Vector',
+      description: 'Vector drawing tool that converts bitmaps to vectors and lets you edit SVG paths',
+      keywords: 'vector svg trace vectorize bitmap path bezier editor',
+    },
+    'zh-TW': {
+      title: 'Merino 向量繪圖',
+      short: 'Merino 向量繪圖',
+      description: '將點陣圖轉為向量，並可編輯 SVG 路徑的向量繪圖工具',
+      keywords: '向量 繪圖 點陣圖 轉向量 描圖 svg 路徑 貝茲曲線',
     },
   },
 )
