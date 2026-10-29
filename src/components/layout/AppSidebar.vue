@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import {
   ChevronRight,
   Github,
+  HeartHandshake,
   LayoutGrid,
   PanelLeftClose,
   PanelLeftOpen,
@@ -17,6 +18,7 @@ import ExternalMark from '@/components/ui/ExternalMark.vue'
 import { groups, isExternalTool, tools, toolsOfGroup, type ToolDefinition } from '@/tools/registry'
 import { useI18n } from '@/i18n'
 import { useSettings } from '@/composables/useSettings'
+import { useInspiredBy } from '@/composables/useInspiredBy'
 
 const props = defineProps<{ mobileOpen: boolean }>()
 const emit = defineEmits<{ (e: 'close'): void }>()
@@ -25,6 +27,7 @@ const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const { sidebarCollapsed, favorites } = useSettings()
+const inspiredBy = useInspiredBy()
 
 const query = ref('')
 const searchFocused = ref(false)
@@ -251,6 +254,15 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
 
     <!-- Footer -->
     <div class="shrink-0 border-t border-line p-2 space-y-0.5">
+      <button
+        type="button"
+        class="nav-item w-full"
+        :title="t('inspired.title')"
+        @click="inspiredBy.show(); emit('close')"
+      >
+        <HeartHandshake class="nav-icon" />
+        <span v-if="!collapsed" class="truncate">{{ t('inspired.title') }}</span>
+      </button>
       <a
         href="https://github.com/Mike-Zheng/dev"
         target="_blank"

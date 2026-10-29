@@ -99,6 +99,16 @@ export const zhTW: DeepPartial<Messages> = {
     aboutDesc: '以 Vue 3、Vite 與 Tailwind CSS 打造的開發者工具集，所有工具皆在瀏覽器本機執行。',
     version: '版本',
   },
+  inspired: {
+    title: '靈感來源',
+    intro: 'dev 站在這些專案的肩膀上，謝謝它們！',
+    view: '查看',
+    close: '關閉',
+    projects: '參考專案',
+    libraries: '開源函式庫',
+    externalTools: '獨立工具',
+    layoutNote: '整體版面與多數工具的設計',
+  },
   groups: {
     converters: '轉換器',
     encoders: '編碼 / 解碼工具',

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Info, Languages, Monitor, Moon, Palette, Star, SunMedium, TextWrap, History, Type } from 'lucide-vue-next'
+import { HeartHandshake, Info, Languages, Monitor, Moon, Palette, Star, SunMedium, TextWrap, History, Type } from 'lucide-vue-next'
 import SettingCard from '@/components/ui/SettingCard.vue'
 import SectionTitle from '@/components/ui/SectionTitle.vue'
 import BaseSwitch from '@/components/ui/BaseSwitch.vue'
@@ -9,10 +9,12 @@ import BaseButton from '@/components/ui/BaseButton.vue'
 import { useI18n, type Locale } from '@/i18n'
 import { useSettings, type ThemeMode } from '@/composables/useSettings'
 import { useToast } from '@/composables/useToast'
+import { useInspiredBy } from '@/composables/useInspiredBy'
 
 const { t, locale, locales } = useI18n()
 const { theme, wordWrap, editorFontSize, favorites, recents } = useSettings()
 const { show } = useToast()
+const { show: showInspiredBy } = useInspiredBy()
 const version = __APP_VERSION__
 
 const themeOptions: { value: ThemeMode; label: string; icon: typeof Monitor }[] = [
@@ -82,6 +84,9 @@ function clearRecents() {
       <SectionTitle :title="t('settings.about')" />
       <SettingCard :icon="Info" :title="t('app.name')" :description="t('settings.aboutDesc')">
         <span class="font-mono text-xs text-fg-muted">v{{ version }}</span>
+      </SettingCard>
+      <SettingCard :icon="HeartHandshake" :title="t('inspired.title')" :description="t('inspired.intro')">
+        <BaseButton variant="outline" size="sm" @click="showInspiredBy">{{ t('inspired.view') }}</BaseButton>
       </SettingCard>
     </section>
   </div>

@@ -95,6 +95,16 @@ export const en = {
     aboutDesc: 'A collection of developer tools built with Vue 3, Vite and Tailwind CSS. All tools run locally in your browser.',
     version: 'Version',
   },
+  inspired: {
+    title: 'Inspired by',
+    intro: 'dev stands on the shoulders of these projects. Thank you!',
+    view: 'View',
+    close: 'Close',
+    projects: 'Projects',
+    libraries: 'Open-source libraries',
+    externalTools: 'Standalone tools',
+    layoutNote: 'App layout and the design of many tools',
+  },
   groups: {
     converters: 'Converters',
     encoders: 'Encoders / Decoders',

@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import { Menu, Moon, Sun } from 'lucide-vue-next'
 import AppSidebar from '@/components/layout/AppSidebar.vue'
 import Toaster from '@/components/ui/Toaster.vue'
+import InspiredByDialog from '@/components/layout/InspiredByDialog.vue'
 import { useI18n } from '@/i18n'
 import { useSettings } from '@/composables/useSettings'
 
@@ -74,5 +75,6 @@ watch(
     </div>
 
     <Toaster />
+    <InspiredByDialog />
   </div>
 </template>

@@ -38,10 +38,11 @@ src/
   i18n/                   極簡 i18n（en、zh-TW 字典 + useI18n）
   composables/            useTheme、useSettings、useFavorites、useClipboard 等
   components/
-    layout/               Sidebar、TopBar、ToolCard、ToolGrid ...
+    layout/               AppSidebar、InspiredByDialog
     ui/                   Button、Switch、Select、NumberInput、CodeEditor、SettingCard、InfoBar ...
   tools/
     registry.ts           工具與群組的註冊表（id、群組、圖示、懶載入元件、搜尋關鍵字）
+    credits.ts            靈感來源與開源函式庫清單（「靈感來源」對話框）
     converters/           Cron、Date、JsonTable、JsonYaml、NumberBase、Unicode
     encoders/             Base64Text、Base64Image、Certificate、GZip、Html、Jwt、QrCode、Url
     formatters/           Json、Sql、Xml
@@ -58,7 +59,8 @@ src/
 2. 在 `src/i18n/locales/en.ts` 與 `zh-TW.ts` 的 `tools.<id>` 加入 `title`、`short`、`description`、`keywords` 與工具內字串。
 3. 在 `src/tools/registry.ts` 註冊：`id`、`group`、`icon`、`component: () => import(...)`。外連工具（開啟獨立網站）改給 `href` 而不給 `component`，所有連結渲染處須經 `ToolLink` / `ExternalMark`。
 4. 運算邏輯放在同資料夾的純函式模組 `xxx.ts`（不依賴 Vue / i18n，錯誤以代碼回傳，由 `.vue` 對應成 `tt(...)` 訊息），並撰寫同層的 `xxx.test.ts`（Vitest；需要 DOM 時在檔案首行加 `// @vitest-environment jsdom`）。
-5. 執行 `npm test` 與 `npm run build` 確認測試、型別與打包無誤。
+5. 若工具參考了外部專案或引入新的開源函式庫，在 `src/tools/credits.ts` 的 `inspirations` / `libraries` 登記名稱、網址與工具 id。
+6. 執行 `npm test` 與 `npm run build` 確認測試、型別與打包無誤。
 
 ## 指令
 
@@ -78,3 +80,7 @@ npm run preview    # 預覽 docs（GitHub Pages 由 main 分支的 /docs 提供�
 - 顏色只用 `src/style.css` 中定義的 token（`bg-surface`、`text-fg`、`border-line`、`text-accent` 等），不要直接用 Tailwind 的 `slate-800` 之類色票，以確保深淺主題一致。
 - 工具運算必須在瀏覽器端完成；不得呼叫外部 API。
 - Commit 訊息採 Conventional Commits（`feat:`、`fix:`、`chore:`、`style:`、`docs:`、`refactor:`），一個 commit 對應一個完整、可建置的步驟。
+
+## 參考
+
+- 工具參考的外部專案與使用的開源函式庫集中登記於 `src/tools/credits.ts`，由「靈感來源」對話框（`InspiredByDialog.vue`）呈現；外連工具則自動從 registry 帶出。
