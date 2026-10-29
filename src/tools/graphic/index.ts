@@ -531,7 +531,7 @@ defineTool(
 )
 
 defineTool(
-  { id: 'merino-vector', group: 'graphic', icon: PenTool, keywords: ['vector', 'svg', 'trace', 'vectorize', 'bitmap', 'path', 'bezier', 'illustrator'], href: 'https://mike-zheng.github.io/merino-vector/' },
+  { id: 'merino-vector', group: 'graphic', icon: PenTool, keywords: ['vector', 'svg', 'trace', 'vectorize', 'bitmap', 'path', 'bezier', 'illustrator'], href: 'https://mike-zheng.github.io/vector-design/' },
   {
     en: {
       title: 'Merino Vector',
