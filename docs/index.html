@@ -4,20 +4,20 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="DevToys Web - a Swiss Army knife for developers, in your browser." />
+    <meta name="description" content="dev - everyday developer tools that run entirely in your browser." />
     <meta name="color-scheme" content="dark light" />
-    <title>DevToys Web</title>
+    <title>dev</title>
     <script>
       (function () {
         try {
-          var t = localStorage.getItem('devtoys.theme') || 'system';
+          var t = localStorage.getItem('dev.theme') || localStorage.getItem('devtoys.theme') || 'system';
           var dark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
           document.documentElement.classList.toggle('dark', dark);
         } catch (e) {}
       })();
     </script>
-    <script type="module" crossorigin src="./assets/index-DIAH29no.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CIIxo_St.css">
+    <script type="module" crossorigin src="./assets/index-89K9vH2E.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-OAjowW1v.css">
   </head>
   <body>
     <div id="app"></div>

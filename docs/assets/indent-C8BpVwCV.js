@@ -1,0 +1,1 @@
+import{i as t}from"./index-89K9vH2E.js";function a(o,n=!0){return t(()=>{const e=[{value:"two",label:o("common.twoSpaces")},{value:"four",label:o("common.fourSpaces")},{value:"tab",label:o("common.oneTab")}];return n&&e.push({value:"minified",label:o("common.minified")}),e})}function r(o){return o==="two"?"  ":o==="four"?"    ":o==="tab"?"	":""}export{r as i,a as u};
