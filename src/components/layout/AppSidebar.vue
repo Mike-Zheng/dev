@@ -3,7 +3,6 @@ import { computed, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import {
   ChevronRight,
-  Github,
   HeartHandshake,
   LayoutGrid,
   PanelLeftClose,
@@ -110,38 +109,12 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
 <template>
   <aside
     class="flex h-full flex-col bg-bg-soft transition-[width] duration-200"
-    :class="collapsed ? 'w-[68px]' : 'w-[280px]'"
+    :class="collapsed ? 'w-14' : 'w-[280px]'"
+    :data-collapsed="collapsed || undefined"
   >
-    <!-- Brand -->
-    <div class="flex h-14 items-center gap-2 px-3 shrink-0" :class="collapsed ? 'justify-center' : ''">
-      <RouterLink to="/" class="flex items-center gap-2.5 focus-ring rounded-lg" @click="emit('close')">
-        <img src="/favicon.svg" alt="" class="h-8 w-8" />
-        <span v-if="!collapsed" class="font-semibold tracking-tight text-accent">dev</span>
-      </RouterLink>
-      <span class="flex-1" />
-      <button
-        v-if="!mobileOpen"
-        type="button"
-        class="hidden lg:inline-flex h-8 w-8 items-center justify-center rounded-md text-fg-muted hover:bg-surface-2 hover:text-fg focus-ring"
-        :title="t('app.toggleNav')"
-        @click="sidebarCollapsed = !sidebarCollapsed"
-      >
-        <PanelLeftOpen v-if="collapsed" class="h-4.5 w-4.5" />
-        <PanelLeftClose v-else class="h-4.5 w-4.5" />
-      </button>
-      <button
-        v-else
-        type="button"
-        class="inline-flex h-8 w-8 items-center justify-center rounded-md text-fg-muted hover:bg-surface-2 hover:text-fg lg:hidden"
-        @click="emit('close')"
-      >
-        <X class="h-5 w-5" />
-      </button>
-    </div>
-
-    <!-- Search -->
-    <div class="relative px-3 pb-2 shrink-0" v-if="!collapsed">
-      <div class="relative">
+    <!-- Search + sidebar toggle -->
+    <div v-if="!collapsed" class="relative flex items-center gap-1 px-3 pt-3 pb-2 shrink-0">
+      <div class="relative min-w-0 flex-1">
         <Search class="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-fg-faint" />
         <input
           v-model="query"
@@ -154,6 +127,23 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
           @keydown.esc="query = ''"
         />
       </div>
+      <button
+        v-if="!mobileOpen"
+        type="button"
+        class="hidden lg:inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-fg-muted hover:bg-surface-2 hover:text-fg focus-ring"
+        :title="t('app.toggleNav')"
+        @click="sidebarCollapsed = true"
+      >
+        <PanelLeftClose class="h-4.5 w-4.5" />
+      </button>
+      <button
+        v-else
+        type="button"
+        class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-fg-muted hover:bg-surface-2 hover:text-fg lg:hidden"
+        @click="emit('close')"
+      >
+        <X class="h-5 w-5" />
+      </button>
       <div
         v-if="showResults"
         class="absolute left-3 right-3 top-full z-30 mt-1 overflow-hidden rounded-lg border border-line bg-surface shadow-lg"
@@ -176,10 +166,18 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
         <div v-else class="px-3 py-3 text-sm text-fg-muted">{{ t('app.noResults') }}</div>
       </div>
     </div>
-    <div v-else class="px-3 pb-2 shrink-0">
+    <div v-else class="flex flex-col items-center gap-0.5 px-2 pt-3 pb-2 shrink-0">
       <button
         type="button"
-        class="flex h-9 w-full items-center justify-center rounded-md border border-line border-b-line-strong bg-control text-fg-muted hover:bg-control-hover hover:text-fg"
+        class="flex h-10 w-10 items-center justify-center rounded-md text-fg-muted hover:bg-surface-2 hover:text-fg focus-ring"
+        :title="t('app.toggleNav')"
+        @click="sidebarCollapsed = false"
+      >
+        <PanelLeftOpen class="h-4.5 w-4.5" />
+      </button>
+      <button
+        type="button"
+        class="flex h-10 w-10 items-center justify-center rounded-md text-fg-muted hover:bg-surface-2 hover:text-fg focus-ring"
         :title="t('app.search')"
         @click="sidebarCollapsed = false"
       >
@@ -263,16 +261,6 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
         <HeartHandshake class="nav-icon" />
         <span v-if="!collapsed" class="truncate">{{ t('inspired.title') }}</span>
       </button>
-      <a
-        href="https://github.com/Mike-Zheng/dev"
-        target="_blank"
-        rel="noreferrer"
-        class="nav-item"
-        :title="t('app.github')"
-      >
-        <Github class="nav-icon" />
-        <span v-if="!collapsed" class="truncate">{{ t('app.github') }}</span>
-      </a>
       <RouterLink
         to="/settings"
         class="nav-item"
@@ -303,5 +291,9 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
 }
 .nav-icon {
   @apply h-[18px] w-[18px] shrink-0;
+}
+/* Collapsed rail: every item is a centred 40px square */
+[data-collapsed] .nav-item {
+  @apply mx-auto h-10 w-10 flex-none justify-center p-0;
 }
 </style>

@@ -22,7 +22,6 @@ export const zhTW: DeepPartial<Messages> = {
     notFinding: '找不到您想要的東西？',
     notFindingHint: '所有工具皆在瀏覽器本機執行，貼上的內容不會離開這個頁面。',
     suggest: '提出建議',
-    github: 'GitHub 原始碼',
     toolCount: '{count} 個工具',
     privacy: '100% 在瀏覽器執行',
     notFound: '找不到工具',

@@ -18,7 +18,6 @@ export const en = {
     notFinding: "Not finding what you're looking for?",
     notFindingHint: 'Every tool runs locally in your browser. Nothing you paste ever leaves this page.',
     suggest: 'Suggest an idea',
-    github: 'Source on GitHub',
     toolCount: '{count} tools',
     privacy: 'Runs 100% in your browser',
     notFound: 'Tool not found',

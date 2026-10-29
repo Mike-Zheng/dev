@@ -49,10 +49,7 @@ watch(
         >
           <Menu class="h-5 w-5" />
         </button>
-        <RouterLink to="/" class="flex items-center gap-2 font-semibold tracking-tight">
-          <img src="/favicon.svg" alt="" class="h-7 w-7" />
-          <span class="text-accent">dev</span>
-        </RouterLink>
+        <RouterLink to="/" class="font-semibold tracking-tight text-accent">dev</RouterLink>
         <span class="flex-1" />
         <button
           type="button"
