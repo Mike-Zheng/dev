@@ -4,12 +4,12 @@
 
 ## 專案目標
 
-**DevToys Web** —— 以 Vue 3 臨摹 [DevToys](https://github.com/DevToys-app/DevToys)（開發者的瑞士刀）的網頁版本。
+**dev** —— 以 Vue 3 打造的開發者工具集網頁應用。
 所有工具皆在瀏覽器端執行，不需要後端，不上傳任何資料。
 
 設計方向：
 
-- 版面遵循 DevToys 2.0 的資訊架構：左側導覽（搜尋、所有工具、最愛、分類群組）＋ 右側內容（首頁工具卡片網格 / 工具頁）。
+- 版面資訊架構：左側導覽（搜尋、所有工具、最愛、分類群組）＋ 右側內容（首頁工具卡片網格 / 工具頁）。
 - 視覺採「明亮乾淨」：淺色優先、帶極淡水藍（藍中帶綠）調的白色表面與邊框、單一明亮天空藍強調色、字體使用 Noto Sans / Noto Sans TC、不用漸層／發光／裝飾背景，等寬字體用於輸入輸出。
 - 簡潔乾淨、符合線上工具網站的排版，支援 RWD（手機抽屜式側欄、平板與桌機雙欄）。
 - 支援淺色 / 深色 / 跟隨系統主題，以及 en / zh-TW 介面語言。
@@ -78,8 +78,3 @@ npm run preview    # 預覽 docs（GitHub Pages 由 main 分支的 /docs 提供�
 - 顏色只用 `src/style.css` 中定義的 token（`bg-surface`、`text-fg`、`border-line`、`text-accent` 等），不要直接用 Tailwind 的 `slate-800` 之類色票，以確保深淺主題一致。
 - 工具運算必須在瀏覽器端完成；不得呼叫外部 API。
 - Commit 訊息採 Conventional Commits（`feat:`、`fix:`、`chore:`、`style:`、`docs:`、`refactor:`），一個 commit 對應一個完整、可建置的步驟。
-
-## 參考
-
-- DevToys 原始碼：<https://github.com/DevToys-app/DevToys>（應用程式殼層）、<https://github.com/DevToys-app/DevToys.Tools>（30 個內建工具）。
-- 工具標題、描述與介面字串皆對照 DevToys 的 `.resx`（en / zh-Hant）翻譯。

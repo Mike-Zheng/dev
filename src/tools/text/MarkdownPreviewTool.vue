@@ -22,7 +22,7 @@ const themeOptions = computed<{ value: Theme; label: string }[]>(() => [
   { value: 'dark', label: tt('dark') },
 ])
 
-const input = ref(`# DevToys Web\n\nA **Swiss Army knife** for developers, _in your browser_.\n\n- Converters\n- Encoders / Decoders\n- Formatters\n\n\`\`\`ts\nconst answer = 42\n\`\`\`\n\n| Tool | Group |\n| --- | --- |\n| JSON | Formatters |\n\n> Everything runs locally.\n`)
+const input = ref(`# dev\n\n**Everyday tools** for developers, _in your browser_.\n\n- Converters\n- Encoders / Decoders\n- Formatters\n\n\`\`\`ts\nconst answer = 42\n\`\`\`\n\n| Tool | Group |\n| --- | --- |\n| JSON | Formatters |\n\n> Everything runs locally.\n`)
 
 const html = computed(() => renderMarkdown(input.value))
 

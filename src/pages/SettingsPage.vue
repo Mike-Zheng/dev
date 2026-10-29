@@ -80,7 +80,7 @@ function clearRecents() {
 
     <section class="space-y-3">
       <SectionTitle :title="t('settings.about')" />
-      <SettingCard :icon="Info" title="DevToys Web" :description="t('settings.aboutDesc')">
+      <SettingCard :icon="Info" :title="t('app.name')" :description="t('settings.aboutDesc')">
         <span class="font-mono text-xs text-fg-muted">v{{ version }}</span>
       </SettingCard>
     </section>

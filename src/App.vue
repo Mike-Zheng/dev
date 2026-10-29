@@ -50,7 +50,7 @@ watch(
         </button>
         <RouterLink to="/" class="flex items-center gap-2 font-semibold tracking-tight">
           <img src="/favicon.svg" alt="" class="h-7 w-7" />
-          DevToys <span class="text-accent">Web</span>
+          <span class="text-accent">dev</span>
         </RouterLink>
         <span class="flex-1" />
         <button

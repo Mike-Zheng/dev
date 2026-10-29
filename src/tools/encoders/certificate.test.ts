@@ -21,7 +21,7 @@ beforeAll(async () => {
   const ecKeys = await webcrypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify'])
   ecCert = await x509.X509CertificateGenerator.createSelfSigned({
     serialNumber: '01ab',
-    name: 'CN=DevToys Test, O=DevToys',
+    name: 'CN=Dev Test, O=Dev',
     notBefore: NOT_BEFORE,
     notAfter: NOT_AFTER,
     keys: ecKeys as CryptoKeyPair,
@@ -109,8 +109,8 @@ describe('isCertificateFile', () => {
 describe('readCertificate', () => {
   it('reads the basic fields of an EC certificate', async () => {
     const info = await readCertificate(ecCert.toString('pem'), NOT_BEFORE.getTime())
-    expect(info.subject).toBe('CN=DevToys Test, O=DevToys')
-    expect(info.issuer).toBe('CN=DevToys Test, O=DevToys')
+    expect(info.subject).toBe('CN=Dev Test, O=Dev')
+    expect(info.issuer).toBe('CN=Dev Test, O=Dev')
     expect(info.serial).toBe('01AB')
     expect(info.notBefore.toISOString()).toBe('2025-01-01T00:00:00.000Z')
     expect(info.notAfter.toISOString()).toBe('2026-01-01T00:00:00.000Z')
@@ -178,8 +178,8 @@ describe('formatCertificate', () => {
     const info = await readCertificate(ecCert.toString('pem'), NOT_AFTER.getTime() - 30 * DAY)
     const lines = formatCertificate(info, label).split('\n')
     expect(lines.slice(0, 9)).toEqual([
-      '<subject>:   CN=DevToys Test, O=DevToys',
-      '<issuer>:    CN=DevToys Test, O=DevToys',
+      '<subject>:   CN=Dev Test, O=Dev',
+      '<issuer>:    CN=Dev Test, O=Dev',
       '<serial>:    01AB',
       '<notBefore>: 2025-01-01T00:00:00.000Z',
       '<notAfter>:  2026-01-01T00:00:00.000Z  (<validFor> 30 <days>)',

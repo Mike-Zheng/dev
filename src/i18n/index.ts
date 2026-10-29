@@ -1,6 +1,7 @@
 import { computed, ref, watchEffect } from 'vue'
 import { en } from './locales/en'
 import { zhTW } from './locales/zh-TW'
+import { storageKey } from '@/utils/storage'
 
 export type Locale = 'en' | 'zh-TW'
 
@@ -9,7 +10,7 @@ export const locales: { value: Locale; label: string }[] = [
   { value: 'zh-TW', label: '繁體中文' },
 ]
 
-const STORAGE_KEY = 'devtoys.locale'
+const STORAGE_KEY = storageKey('locale')
 
 function detect(): Locale {
   try {

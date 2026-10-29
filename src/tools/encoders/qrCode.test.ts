@@ -31,25 +31,25 @@ describe('options', () => {
   })
 
   it('produces an SVG with the requested options', async () => {
-    const svg = await QRCode.toString('https://devtoys.app', svgOptions('M'))
+    const svg = await QRCode.toString('https://example.com', svgOptions('M'))
     expect(svg.startsWith('<svg')).toBe(true)
   })
 
   it('higher levels need more modules for the same text', () => {
-    const size = (level: Level) => QRCode.create('https://devtoys.app/some/long/path', { errorCorrectionLevel: level }).modules.size
+    const size = (level: Level) => QRCode.create('https://example.com/some/long/path', { errorCorrectionLevel: level }).modules.size
     expect(size('H')).toBeGreaterThan(size('L'))
   })
 })
 
 describe('decodeQr', () => {
   it.each(levels.map((l) => l.value))('round-trips text at level %s', (level) => {
-    const { rgba, size } = renderPixels('https://devtoys.app', level)
-    expect(decodeQr(rgba, size, size)).toBe('https://devtoys.app')
+    const { rgba, size } = renderPixels('https://example.com', level)
+    expect(decodeQr(rgba, size, size)).toBe('https://example.com')
   })
 
   it('round-trips UTF-8 text', () => {
-    const { rgba, size } = renderPixels('你好，DevToys!', 'M')
-    expect(decodeQr(rgba, size, size)).toBe('你好，DevToys!')
+    const { rgba, size } = renderPixels('你好，dev!', 'M')
+    expect(decodeQr(rgba, size, size)).toBe('你好，dev!')
   })
 
   it('returns null when there is no QR code', () => {

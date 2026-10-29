@@ -30,7 +30,7 @@ describe('base64ToBytes', () => {
 
 describe('utf8 helpers', () => {
   it('round-trips multi-byte text', () => {
-    const text = '你好，DevToys 👋'
+    const text = '你好，dev 👋'
     expect(base64ToUtf8(utf8ToBase64(text))).toBe(text)
   })
 

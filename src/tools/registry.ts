@@ -21,7 +21,7 @@ interface ToolBase {
   id: string
   group: ToolGroupId
   icon: Component
-  /** Extra search keywords (English, from DevToys SearchKeywords) */
+  /** Extra English search keywords */
   keywords?: string[]
 }
 

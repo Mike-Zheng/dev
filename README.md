@@ -1,6 +1,6 @@
-# DevToys Web
+# dev
 
-以 Vue 3 + Vite + Tailwind CSS 重現 [DevToys](https://github.com/DevToys-app/DevToys) 的網頁版本。
+以 Vue 3 + Vite + Tailwind CSS 打造的開發者工具集。
 36 個開發者小工具全部在瀏覽器端執行，不需要後端、不上傳任何資料。
 
 ## 工具清單

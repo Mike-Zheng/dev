@@ -1,7 +1,7 @@
 export const en = {
   app: {
-    name: 'DevToys Web',
-    tagline: 'A Swiss Army knife for developers.',
+    name: 'dev',
+    tagline: 'Everyday developer tools, right in your browser.',
     welcome: 'Welcome to',
     search: 'Type to search for tools...',
     noResults: 'No results found',
@@ -80,7 +80,7 @@ export const en = {
   settings: {
     title: 'Settings',
     appearance: 'Appearance',
-    themeDesc: 'Choose how DevToys Web looks.',
+    themeDesc: 'Choose how the app looks.',
     languageDesc: 'Interface language.',
     editor: 'Editor',
     wordWrap: 'Word wrap',
@@ -92,7 +92,7 @@ export const en = {
     clearRecents: 'Clear recents',
     cleared: 'Cleared',
     about: 'About',
-    aboutDesc: 'A web re-creation of DevToys built with Vue 3, Vite and Tailwind CSS. All tools run locally in your browser.',
+    aboutDesc: 'A collection of developer tools built with Vue 3, Vite and Tailwind CSS. All tools run locally in your browser.',
     version: 'Version',
   },
   groups: {

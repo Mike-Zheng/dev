@@ -4,8 +4,8 @@ type DeepPartial<T> = { [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]>
 
 export const zhTW: DeepPartial<Messages> = {
   app: {
-    name: 'DevToys Web',
-    tagline: '開發者的瑞士刀。',
+    name: 'dev',
+    tagline: '開發者的日常工具，直接在瀏覽器裡用。',
     welcome: '歡迎來到',
     search: '輸入以搜尋工具…',
     noResults: '找不到結果',
@@ -84,7 +84,7 @@ export const zhTW: DeepPartial<Messages> = {
   settings: {
     title: '設定',
     appearance: '外觀',
-    themeDesc: '選擇 DevToys Web 的外觀。',
+    themeDesc: '選擇應用程式的外觀。',
     languageDesc: '介面語言。',
     editor: '編輯器',
     wordWrap: '自動換行',
@@ -96,7 +96,7 @@ export const zhTW: DeepPartial<Messages> = {
     clearRecents: '清除最近使用',
     cleared: '已清除',
     about: '關於',
-    aboutDesc: '以 Vue 3、Vite 與 Tailwind CSS 重現的 DevToys 網頁版，所有工具皆在瀏覽器本機執行。',
+    aboutDesc: '以 Vue 3、Vite 與 Tailwind CSS 打造的開發者工具集，所有工具皆在瀏覽器本機執行。',
     version: '版本',
   },
   groups: {

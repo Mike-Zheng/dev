@@ -113,7 +113,7 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
     <div class="flex h-14 items-center gap-2 px-3 shrink-0" :class="collapsed ? 'justify-center' : ''">
       <RouterLink to="/" class="flex items-center gap-2.5 focus-ring rounded-lg" @click="emit('close')">
         <img src="/favicon.svg" alt="" class="h-8 w-8" />
-        <span v-if="!collapsed" class="font-semibold tracking-tight text-fg">DevToys <span class="text-accent">Web</span></span>
+        <span v-if="!collapsed" class="font-semibold tracking-tight text-accent">dev</span>
       </RouterLink>
       <span class="flex-1" />
       <button
@@ -252,7 +252,7 @@ const collapsed = computed(() => sidebarCollapsed.value && !props.mobileOpen)
     <!-- Footer -->
     <div class="shrink-0 border-t border-line p-2 space-y-0.5">
       <a
-        href="https://github.com/DevToys-app/DevToys"
+        href="https://github.com/Mike-Zheng/dev"
         target="_blank"
         rel="noreferrer"
         class="nav-item"

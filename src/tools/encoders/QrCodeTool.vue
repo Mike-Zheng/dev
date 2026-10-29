@@ -18,7 +18,7 @@ const tt = (k: string) => t(`tools.qrcode.${k}`)
 
 const level = ref<Level>('M')
 
-const text = ref('https://devtoys.app')
+const text = ref('https://mike-zheng.github.io/dev/')
 const canvas = ref<HTMLCanvasElement | null>(null)
 const error = ref('')
 const hasQr = ref(false)

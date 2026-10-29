@@ -27,7 +27,7 @@ const width = ref(0)
 const whitespaceBreak = ref(true)
 const trimTrailing = ref(true)
 const comment = ref<CommentStyle>('none')
-const input = ref('DevToys')
+const input = ref('dev')
 
 const fontOptions = fontNames.map((f) => ({ value: f, label: f }))
 
@@ -112,7 +112,7 @@ const galleryLoading = computed(() => galleryOpen.value && galleryFonts.value.le
 const galleryItems = computed(() => {
   if (!galleryOpen.value) return []
   const q = galleryFilter.value.trim().toLowerCase()
-  const text = galleryText.value || 'DevToys'
+  const text = galleryText.value || 'dev'
   return galleryFonts.value
     .filter((f) => !q || f.toLowerCase().includes(q))
     .map((f) => {

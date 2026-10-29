@@ -23,7 +23,7 @@ watch(
   () => props.id,
   (id) => {
     if (findTool(id)) pushRecent(id)
-    document.title = tool.value ? `${t(`tools.${id}.title`)} - DevToys Web` : 'DevToys Web'
+    document.title = tool.value ? `${t(`tools.${id}.title`)} - dev` : 'dev'
   },
   { immediate: true },
 )

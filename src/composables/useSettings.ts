@@ -1,4 +1,5 @@
 import { ref, watch, watchEffect } from 'vue'
+import { storageKey } from '@/utils/storage'
 
 export type ThemeMode = 'system' | 'light' | 'dark'
 
@@ -21,7 +22,7 @@ function persist(key: string, value: unknown) {
 
 function readTheme(): ThemeMode {
   try {
-    const raw = localStorage.getItem('devtoys.theme')
+    const raw = localStorage.getItem(storageKey('theme'))
     if (raw === 'light' || raw === 'dark' || raw === 'system') return raw
   } catch {
     /* ignore */
@@ -30,11 +31,11 @@ function readTheme(): ThemeMode {
 }
 
 const theme = ref<ThemeMode>(readTheme())
-const wordWrap = ref<boolean>(read('devtoys.wordWrap', true))
-const editorFontSize = ref<number>(read('devtoys.editorFontSize', 13))
-const sidebarCollapsed = ref<boolean>(read('devtoys.sidebarCollapsed', false))
-const favorites = ref<string[]>(read('devtoys.favorites', []))
-const recents = ref<string[]>(read('devtoys.recents', []))
+const wordWrap = ref<boolean>(read(storageKey('wordWrap'), true))
+const editorFontSize = ref<number>(read(storageKey('editorFontSize'), 13))
+const sidebarCollapsed = ref<boolean>(read(storageKey('sidebarCollapsed'), false))
+const favorites = ref<string[]>(read(storageKey('favorites'), []))
+const recents = ref<string[]>(read(storageKey('recents'), []))
 
 const media = window.matchMedia('(prefers-color-scheme: dark)')
 const isDark = ref(false)
@@ -48,17 +49,17 @@ media.addEventListener('change', applyTheme)
 
 watchEffect(() => {
   try {
-    localStorage.setItem('devtoys.theme', theme.value)
+    localStorage.setItem(storageKey('theme'), theme.value)
   } catch {
     /* ignore */
   }
   applyTheme()
 })
-watch(wordWrap, (v) => persist('devtoys.wordWrap', v))
-watch(editorFontSize, (v) => persist('devtoys.editorFontSize', v))
-watch(sidebarCollapsed, (v) => persist('devtoys.sidebarCollapsed', v))
-watch(favorites, (v) => persist('devtoys.favorites', v), { deep: true })
-watch(recents, (v) => persist('devtoys.recents', v), { deep: true })
+watch(wordWrap, (v) => persist(storageKey('wordWrap'), v))
+watch(editorFontSize, (v) => persist(storageKey('editorFontSize'), v))
+watch(sidebarCollapsed, (v) => persist(storageKey('sidebarCollapsed'), v))
+watch(favorites, (v) => persist(storageKey('favorites'), v), { deep: true })
+watch(recents, (v) => persist(storageKey('recents'), v), { deep: true })
 
 export function useSettings() {
   function toggleFavorite(id: string) {

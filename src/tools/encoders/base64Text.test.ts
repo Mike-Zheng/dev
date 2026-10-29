@@ -50,7 +50,7 @@ describe('decodeText', () => {
   })
 
   it('round-trips unicode text including astral characters', () => {
-    const text = 'DevToys 開發工具 🧰\n\ttab'
+    const text = 'dev 開發工具 🧰\n\ttab'
     expect(decodeText(encodeText(text, 'utf8', false), 'utf8')).toBe(text)
     expect(decodeText(encodeText(text, 'utf8', true), 'utf8')).toBe(text)
   })

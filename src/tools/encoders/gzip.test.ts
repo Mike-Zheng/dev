@@ -28,8 +28,8 @@ describe('compressText', () => {
 
 describe('decompressText', () => {
   it('decompresses data produced by zlib', () => {
-    const b64 = gzipSync(Buffer.from('DevToys 開發工具 🧰', 'utf8')).toString('base64')
-    expect(decompressText(b64).output).toBe('DevToys 開發工具 🧰')
+    const b64 = gzipSync(Buffer.from('dev 開發工具 🧰', 'utf8')).toString('base64')
+    expect(decompressText(b64).output).toBe('dev 開發工具 🧰')
   })
 
   it('computes the saving relative to the decompressed size', () => {

@@ -59,7 +59,7 @@ const recentTools = computed(() =>
         <div>
           <div class="font-medium text-fg">{{ t('app.notFinding') }}</div>
           <div class="text-fg-muted">{{ t('app.notFindingHint') }}</div>
-          <a href="https://github.com/DevToys-app/DevToys/issues" target="_blank" rel="noreferrer" class="mt-1 inline-block text-accent hover:underline">
+          <a href="https://github.com/Mike-Zheng/dev/issues" target="_blank" rel="noreferrer" class="mt-1 inline-block text-accent hover:underline">
             {{ t('app.suggest') }}
           </a>
         </div>
