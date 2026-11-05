@@ -25,7 +25,7 @@
 | 圖示 | lucide-vue-next |
 | 型別 | TypeScript（`vue-tsc` 檢查） |
 
-工具實作使用的瀏覽器端函式庫（皆為純前端）：`js-yaml`、`cron-parser`、`cronstrue`、`sql-formatter`、`xml-formatter`、`marked` + `dompurify`、`diff`、`qrcode`、`jsqr`、`pako`、`hash-wasm`、`uuid`、`jsonpath-plus`、`jose`、`@peculiar/x509`、`figlet`、`@xdadda/mini-gl`（WebGL2 相片濾鏡）、`@jsquash/jpeg` + `@jsquash/webp` + `libimagequant-wasm` + `svgo`（圖片壓縮，於 Web Worker 中執行）。
+工具實作使用的瀏覽器端函式庫（皆為純前端）：`js-yaml`、`cron-parser`、`cronstrue`、`sql-formatter`、`xml-formatter`、`marked` + `dompurify`、`diff`、`qrcode`、`jsqr`、`pako`、`hash-wasm`、`uuid`、`jsonpath-plus`、`jose`、`@peculiar/x509`、`figlet`、`@xdadda/mini-gl`（WebGL2 相片濾鏡）、`@jsquash/jpeg` + `@jsquash/webp` + `libimagequant-wasm` + `svgo`（圖片壓縮，於 Web Worker 中執行）、`three` + `meshoptimizer`（3D 低多邊形：WebGL 預覽與網格減面，減面於 Web Worker 中執行）。
 
 ## 目錄結構
 
@@ -47,7 +47,7 @@ src/
     encoders/             Base64Text、Base64Image、Certificate、GZip、Html、Jwt、QrCode、Url
     formatters/           Json、Sql、Xml
     generators/           AsciiArt、Hash、LoremIpsum、Password、Uuid
-    graphic/              ColorBlindness、ImageConverter、ImageCompressor、TriangleGradient、BoxShadow、PhotoEditor、PhotoCollage / MerinoVector（外連工具，僅註冊 `href`，無元件）
+    graphic/              ColorBlindness、ImageConverter、ImageCompressor、TriangleGradient、BoxShadow、PhotoEditor、LowPoly（3D 低多邊形）、PhotoCollage / MerinoVector（外連工具，僅註冊 `href`，無元件）
     testers/              JsonPath、RegEx、Xml
     text/                 Analyzer、Compare、EscapeUnescape、ListCompare、MarkdownPreview
   pages/                  HomePage、GroupPage、ToolPage、SettingsPage

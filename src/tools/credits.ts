@@ -16,6 +16,7 @@ export const inspirations: Credit[] = [
   { name: 'Recompressor', url: 'https://recompressor.com/', tools: ['image-compressor'] },
   { name: 'Matrix Compress', url: 'https://github.com/Mike-Zheng/eagle-plugin-matrix-compress', tools: ['image-compressor'] },
   { name: 'mini-photo-editor', url: 'https://github.com/xdadda/mini-photo-editor', tools: ['photo-editor'] },
+  { name: '3D Low Poly Generator', url: 'https://lowpoly3d.xyz/', tools: ['low-poly'] },
 ]
 
 function npm(name: string, tools: string[]): Credit {
@@ -42,6 +43,8 @@ export const libraries: Credit[] = [
   npm('@jsquash/webp', ['image-compressor']),
   npm('libimagequant-wasm', ['image-compressor']),
   npm('svgo', ['image-compressor']),
+  npm('three', ['low-poly']),
+  npm('meshoptimizer', ['low-poly']),
   npm('jsonpath-plus', ['jsonpath']),
   npm('xmllint-wasm', ['xml-tester']),
   npm('diff', ['text-compare']),
