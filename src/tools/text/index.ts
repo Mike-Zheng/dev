@@ -1,4 +1,4 @@
-import { TextSearch, GitCompare, Quote, ListChecks, BookOpen, CopyMinus, ArrowDownAZ } from 'lucide-vue-next'
+import { TextSearch, GitCompare, Quote, ListChecks, BookOpen, CopyMinus, ArrowDownAZ, Tally5 } from 'lucide-vue-next'
 import { defineTool } from '../registry'
 
 defineTool(
@@ -231,6 +231,52 @@ defineTool(
       trimDesc: '比較前先移除每行開頭與結尾的空白',
       removeEmpty: '移除空白行',
       summary: '保留 {kept} 行 · 移除 {removed} 行',
+    },
+  },
+)
+
+defineTool(
+  { id: 'line-count', group: 'text', icon: Tally5, keywords: ['count', 'occurrence', 'frequency', 'tally', 'duplicate', 'uniq -c', 'lines'], component: () => import('./LineCountTool.vue') },
+  {
+    en: {
+      title: 'Line Occurrence Counter',
+      short: 'Count Occurrences',
+      description: 'Trim every line and count how many times each identical line appears',
+      keywords: 'count occurrence frequency tally duplicate lines uniq',
+      sort: 'Sort order',
+      sortDesc: 'Select how the results are ordered',
+      sortCount: 'Most frequent first',
+      sortFirst: 'Order of first appearance',
+      sortAlpha: 'Alphabetical',
+      caseSensitive: 'Case sensitive comparison',
+      ignoreEmpty: 'Ignore empty lines',
+      placeholder: 'One item per line',
+      value: 'Value',
+      count: 'Count',
+      emptyLine: '(empty line)',
+      empty: 'Enter text on the left; identical lines are counted after trimming',
+      copyTsv: 'Copy as tab-separated values',
+      summary: '{distinct} distinct · {total} lines',
+    },
+    'zh-TW': {
+      title: '數量統計工具',
+      short: '數量統計',
+      description: '去除每行首尾空白後，統計相同內容各出現幾次',
+      keywords: '數量 統計 計數 出現次數 頻率 重複 行',
+      sort: '排序方式',
+      sortDesc: '選擇統計結果的排列順序',
+      sortCount: '依數量（多到少）',
+      sortFirst: '依首次出現順序',
+      sortAlpha: '依字母順序',
+      caseSensitive: '比較時區分大小寫',
+      ignoreEmpty: '忽略空白行',
+      placeholder: '每行一個項目',
+      value: '內容',
+      count: '數量',
+      emptyLine: '（空白行）',
+      empty: '在左側輸入文字，去除首尾空白後相同的行會被合併計數',
+      copyTsv: '以 Tab 分隔格式複製',
+      summary: '{distinct} 種 · 共 {total} 行',
     },
   },
 )
