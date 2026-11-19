@@ -31,3 +31,9 @@ npm run preview   # 預覽 docs/
 ## 專案結構與慣例
 
 見 [AGENTS.md](AGENTS.md)。
+
+## 授權
+
+本專案以 [GNU General Public License v3.0 或更新版本](LICENSE)（GPL-3.0-or-later）授權。
+
+圖片壓縮工具使用的 [libimagequant](https://github.com/ImageOptim/libimagequant)（經由 `libimagequant-wasm` 打包進網站）以 GPL-3.0 授權，因此整個專案採用相容的 GPL-3.0。其餘依賴皆為 GPL-3.0 相容的寬鬆授權（MIT、Apache-2.0、BSD-3-Clause、ISC、Zlib、MPL-2.0、OFL-1.1），各自保有原授權條款，完整清單見「靈感來源」對話框或 `package.json`。
